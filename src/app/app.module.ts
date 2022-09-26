@@ -140,7 +140,7 @@ import { CreateNextActionComponent } from './components/client-deal-detail/creat
 			},
 		}),
 		AgmCoreModule.forRoot({
-			apiKey: 'AIzaSyAvvKQ0stxuDDvqPqm9pmNg3LGoadZW03E',
+			apiKey: '',
 			libraries: ['places'],
 		}),
 		SidebarModule.forRoot(),
