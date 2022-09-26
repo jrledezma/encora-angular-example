@@ -1,0 +1,52 @@
+.admin-platform-container {
+	padding: 0.2rem !important;
+	position: absolute !important;
+	top: 25% !important;
+	left: 5% !important;
+	width: 90% !important;
+	border-radius: 8px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	border-color: #f1f1f1 !important;
+	background-color: #f7f7f7 !important;
+}
+
+/***************************************************
+*                                                  *
+*                  media query                     *
+*                                                  *
+***************************************************/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 350px) {
+}
+
+@media (min-width: 410px) {
+}
+
+@media (min-width: 576px) {
+	.admin-platform-container {
+		top: 25% !important;
+		left: 25% !important;
+		width: 50% !important;
+	}
+}
+
+@media (min-width: 768px) {
+	.admin-platform-container {
+		top: 25% !important;
+		left: 30% !important;
+		width: 40% !important;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 1300px) {
+}

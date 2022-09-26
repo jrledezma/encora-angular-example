@@ -1,0 +1,140 @@
+<div class="modal-body animated fadeIn">
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+	<div class="m-auto p-0 col-sm-12">
+		<div class="row">
+			<div class="col-sm-12">
+				<form [formGroup]="registerUserForm" autocomplete="off" class="p-3">
+					<div class="form-row profile-image-div">
+						<label class="cursor-pointer image-input w-100 text-center">
+							<input
+								type="file"
+								class=""
+								accept="image/png, image/jpeg"
+								(change)="onSelect($event)"
+								hidden
+							/>
+							<img
+								class="img-thumbnail profile-image"
+								style="position: relative; border-radius: 50%; top: -20px"
+								[src]="userImage"
+							/>
+						</label>
+					</div>
+					<hr class="w-100" />
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label for=""><small>Primer Nombre</small> </label>
+							<small
+								*ngIf="registerUserForm.controls['firstName'].errors?.required"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="text"
+								class="form-control w-100"
+								formControlName="firstName"
+							/>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for=""><small>Apellidos</small> </label>
+							<small
+								*ngIf="registerUserForm.controls['lastName'].errors?.required"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="text"
+								class="form-control w-100"
+								formControlName="lastName"
+							/>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<div class="form-group w-100">
+								<label class="mb-0"><small>Correo Electrónico</small></label
+								>&nbsp;
+								<small
+									*ngIf="registerUserForm.controls['email'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<input
+									type="text"
+									class="form-control w-100"
+									formControlName="email"
+								/>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<div class="form-group w-100">
+								<label class="mb-0"><small>Selecciona tu País</small></label
+								>&nbsp;
+								<small
+									*ngIf="
+										registerUserForm.controls['countryCode'].errors?.required
+									"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="countryList"
+									bindValue="code"
+									bindLabel="name"
+									formControlName="countryCode"
+									placeHolder=""
+								></ng-select>
+							</div>
+						</div>
+						<div class="form-group col-sm-6">
+							<label class="mb-0"><small>Número de Teléfono</small></label
+							>&nbsp;
+							<small
+								*ngIf="
+									registerUserForm.controls['phoneNumber'].errors?.required
+								"
+								class="form-control-feedback mt-1 text-danger"
+								>*</small
+							>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-phone-alt"></i>
+									</span>
+								</div>
+								<input
+									type="text"
+									class="form-control"
+									knifeOnlyNumbers
+									id="phoneNumber"
+									formControlName="phoneNumber"
+									placeholder=""
+								/>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row mb-2 editor-container">
+						<quill-editor class="w-100" formControlName="about"> </quill-editor>
+					</div>
+
+					<button type="submit" hidden (click)="modifyData()"></button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

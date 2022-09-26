@@ -1,0 +1,66 @@
+<div class="mt-3 animated fadeIn slow">
+	<div class="admin-platform-container m-auto">
+		<div class="card">
+			<!-- Card header -->
+			<div
+				class="card-header text-center"
+				style="background-color: #f1f1f1 !important"
+			>
+				<h3 class="mb-0">
+					<i class="fa fa-user-times"></i>&nbsp;Cerrar tu Cuenta en Clifoll
+				</h3>
+				<p class="mb-0 text-muted">
+					<small>Eliminar o cerrar tu cuenta permanentemente.</small>
+				</p>
+			</div>
+			<!-- Card body -->
+			<div class="card-body p-4">
+				<span class="text-danger h4">Advertencia</span>
+				<p class="mt-0 mb-0">
+					Es posible que pierdas tus datos si cierras tu cuenta
+				</p>
+				<p class="mt-0">Ingresa tus datos para eliminar tu cuenta</p>
+				<form
+					[formGroup]="credentialsForm"
+					class="animated fadeIn slow secondary-box"
+					autocomplete="off"
+				>
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<label for=""> <small>Correo Eléctronico </small></label>
+							<input
+								type="email"
+								class="form-control w-100 text-lowercase"
+								formControlName="email"
+							/>
+							<span
+								*ngIf="credentialsForm.controls['email'].errors?.email"
+								class="text-danger ml-0 mt-0 w-100"
+								><small>
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Formato no
+									valido.
+								</small></span
+							>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12 mb-0">
+							<label for=""><small> Contraseña </small></label>
+							<input
+								type="password"
+								class="form-control w-100 mb-0"
+								formControlName="password"
+							/>
+						</div>
+					</div>
+					<button type="submit" hidden (click)="closeAccount()"></button>
+				</form>
+				<div class="w-100 text-right">
+					<button class="btn btn-outline-danger" (click)="closeAccount()">
+						Cerrar mi Cuenta
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

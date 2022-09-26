@@ -1,0 +1,462 @@
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item active component-header" aria-current="page">
+			<h4 class="text-muted"><i class="fa fa-briefcase"></i>&nbsp;Tratos con Clientes</h4>
+		</li>
+	</ol>
+</nav>
+<div class="admin-platform-container">
+	<div class="animated fadeIn">
+		<div class="main-box mb-3">
+			<form class="row" [formGroup]="filterForm" autocomplete="off" (ngSubmit)="search()">
+				<div class="col-sm-12">
+					<div class="d-flex flex-row flex-nowrap justify-content-between">
+						<div class="search-header">
+							<h4 class="text-muted w-50 mt-auto mb-0">Búsqueda</h4>
+						</div>
+						<!--
+						<div class="dropdown pt-3">
+							<a
+								class="mt-2 dropdown-toggle mr-4"
+								href="#"
+								id="navbarDropdown"
+								role="button"
+								data-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false"
+							>
+								<i class="fa fa-filter"></i>
+								&nbsp;
+								<span *ngIf="clientTypeFilter === 'all'">Todos</span>
+								<span *ngIf="clientTypeFilter === 'own'">Propios</span>
+								<span *ngIf="clientTypeFilter === 'external'">Externos</span>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a
+									class="dropdown-item text-center text-muted cursor-pointer"
+									(click)="filterChange('all')"
+								>
+									<div class="d-flex flex-row flex-nowrap">
+										<i class="mt-1 fa fa-users"></i>
+										&nbsp; &nbsp;
+										<span>Todos</span>
+									</div>
+								</a>
+								<a
+									class="dropdown-item text-center text-muted cursor-pointer mb-1"
+									(click)="filterChange('own')"
+								>
+									<div class="d-flex flex-row flex-nowrap">
+										<i class="mt-1 fa fa-unlock"></i>
+										&nbsp; &nbsp;
+										<span>Propios</span>
+									</div></a
+								>
+								<a
+									class="dropdown-item text-center text-muted cursor-pointer"
+									(click)="filterChange('external')"
+								>
+									<div class="d-flex flex-row flex-nowrap">
+										<i class="mt-1 fa fa-lock"></i>
+										&nbsp; &nbsp;
+										<span>Externos</span>
+									</div>
+								</a>
+							</div>
+						</div>
+						-->
+					</div>
+					<hr />
+				</div>
+				<div class="col-sm-12 form-row">
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa fa-briefcase"></i>
+								</span>
+							</div>
+							<input
+								type="text"
+								class="form-control"
+								id="clientCompanyName"
+								formControlName="clientCompanyName"
+								placeholder="Filtrar por Nombre de Cliente"
+							/>
+						</div>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa fa-envelope"></i>
+								</span>
+							</div>
+							<input
+								type="text"
+								class="form-control"
+								id="clientEmail"
+								formControlName="clientEmail"
+								placeholder="Filtrar por E-mail de Cliente"
+							/>
+						</div>
+					</div>
+				</div>
+				<div
+					class="mr-2 ml-auto pl-2 pr-2 d-flex flex-row flex-nowrap text-right justify-content-end bg-light w-fit-content"
+				>
+					<ng-template #searchTooltip
+						><span class="pl-1 pr-1 bg-transparent"
+							><i class="fa fa-info-circle text-info"></i>&nbsp;Buscar</span
+						></ng-template
+					>
+					<button
+						type="submit"
+						class="align-middle btn btn-outline-dark mt-2 mb-2"
+						(click)="search()"
+						placement="top"
+						[ngbTooltip]="searchTooltip"
+						tooltipClass="bg-transparent"
+					>
+						<i class="fa fa-search"></i></button
+					>&nbsp;
+					<ng-template #newTracking class="w-100 ml-0 mr-0"
+						><span class="w-100 ml-0 mr-0 pl-1 pr-1 bg-transparent"
+							><i class="fa fa-info-circle text-info"></i>&nbsp;Crear nuevo trato</span
+						></ng-template
+					>
+					<button
+						type="button"
+						class="align-middle btn btn-outline-success mt-2 mb-2"
+						(click)="openDetailModal(null)"
+						[ngbTooltip]="newTracking"
+						tooltipClass="bg-transparent"
+					>
+						<i class="fa fa-plus-circle"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+		<!--
+		<div class="card-view mb-3 justify-content-between">
+			<div
+				*ngFor="let deal of dealsList | paginate: paginationOpt; let i = index"
+				class="card"
+			>
+				
+				<div class="card-header">
+					<h5 class="card-title text-capitalize">
+						<small
+							><i
+								class="text-muted fa"
+								[ngClass]="{
+									'fa-lock-open': deal.ownClient,
+									'fa-lock': !deal.ownClient
+								}"
+							></i></small
+						>&nbsp;
+						{{ deal.companyName }}
+					</h5>
+				</div>
+				<div class="card-body">
+					<div class="w-100 d-flex flex-nowrap flex-row">
+						<div class="w-60">
+							<span class="float-left">
+								<small>
+									<p class="title mt-1 mb-0">Correo Electrónico</p>
+									<p>
+										{{ deal.email }}
+									</p>
+								</small>
+							</span>
+						</div>
+						<div class="w-40">
+							<span class="float-left">
+								<small>
+									<p class="title mt-1 mb-0">Número Teléfonico</p>
+									<p>
+										{{ deal.phoneNumber }}
+									</p>
+								</small>
+							</span>
+						</div>
+					</div>
+
+					<div class="w-100 d-flex flex-nowrap flex-row">
+						<div class="w-60">
+							<span class="float-left">
+								<small>
+									<p class="title mt-1 mb-0">Estado</p>
+									<p
+										[ngClass]="{
+											'text-success': deal.isActive,
+											'text-muted': !deal.isActive
+										}"
+									>
+										{{ deal.isActive ? 'Ciente Activo' : 'Cliente Inactivo' }}
+									</p>
+								</small>
+							</span>
+						</div>
+						<div class="w-40">
+							<span class="float-left">
+								<small>
+									<p class="title mt-1 mb-0">Encargado</p>
+									<a
+										class="cursor-pointer"
+										(click)="openUserInfoDetailModal(deal.createdBy)"
+									>
+										<p
+											[ngClass]="{
+												'text-success': deal.createdBy.status === userStatus.created,
+												'text-muted': deal.createdBy.status !== userStatus.created
+											}"
+										>
+											<img
+												class="img-thumbnail profile-image-small"
+												[ngClass]="{
+													'profile-image-status-created':
+														deal.createdBy.status !== userStatus.confirmed,
+													'profile-image-status-confirmed':
+														deal.createdBy.status === userStatus.confirmed
+												}"
+												style="width: 28px !important; height: 28px !important"
+												[src]="
+													deal.createdBy.image ||
+													'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+												"
+											/>
+											&nbsp;
+
+											{{ deal.createdBy.firstName }}&nbsp;{{ deal.createdBy.lastName }}
+										</p>
+									</a>
+								</small>
+							</span>
+						</div>
+					</div>
+					{{ deal._id }}
+					<button
+						type="button"
+						class="btn btn-outline-dark w-100 mt-3 mb-0 position-sticky"
+						(click)="goToDetail(deal._id)"
+					>
+						<i class="fa fa-edit"></i>&nbsp; Realizar Seguimiento
+					</button>
+				</div>
+			</div>
+		</div>
+		-->
+
+		<ul ngbNav #nav="ngbNav" class="nav-tabs">
+			<li ngbNavItem>
+				<a ngbNavLink
+					><i class="fa fa-user-tie"></i>&nbsp;{{ dealsList[0]?.idNumber }} -
+					{{ dealsList[0]?.companyName }}</a
+				>
+				<ng-template ngbNavContent>
+					<div class="mt-4">
+						<div
+							*ngFor="
+								let deal of dealsList[0]?.deals | paginate: paginationOpt;
+								let j = index
+							"
+							class="card w-100"
+						>
+							<div class="card-header">
+								<div class="d-flex flex-row flex-nowrap">
+									<h6 class="card-title text-capitalize mt-0 mb-0 w-80">
+										<small><i class="text-muted fa fa-briefcase"></i></small>&nbsp;
+										{{ deal.referenceCode }}
+									</h6>
+									<a
+										role="button"
+										class="text-info w-20 mb-0 position-sticky text-right"
+										(click)="goToDetail(deal._id)"
+									>
+										<i class="fa fa-edit"></i>
+									</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-70">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-muted">Título</p>
+												<p class="mb-0 text-dark">
+													{{ deal.title }}
+												</p>
+											</small>
+										</span>
+									</div>
+									<div class="w-30">
+										<span>
+											<small class="text-right">
+												<p class="title mt-1 mb-0 text-muted">
+													<i class="fa fa-directions"></i>&nbsp;Próxima Acción
+												</p>
+												<p
+													class="mb-0"
+													[ngClass]="{
+														'text-danger': deal.nextActionToTake.dateHasPassed,
+														'text-success': !deal.nextActionToTake.dateHasPassed
+													}"
+												>
+													{{ deal.nextActionToTake.scheduleDate | date: 'shortDate' }},
+													{{ deal.nextActionToTake.scheduleHour }}
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-100">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-muted">Descripción</p>
+												<p class="text-dark mb-0">
+													{{ deal.comments }}
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+								<hr class="w-100" />
+								<div class="w-100 d-flex flex-nowrap flex-row justify-content-start">
+									<div class="d-block w-50">
+										<label class="mb-0 text-muted w-100"
+											><small style="font-size: 75%"
+												><i class="fa fa-award"></i>&nbsp;Creado Por</small
+											></label
+										>
+										<div class="pl-1">
+											<p class="text-dark mb-0">
+												<small style="font-size: 75%"><i class="fa fa-user"></i></small>
+												{{ deal?.createdBy?.firstName }}
+												{{ deal?.createdBy?.lastName }}
+											</p>
+											<p class="text-muted">
+												<small style="font-size: 75% !important">
+													<i class="fa fa-calendar"></i>
+													{{ deal?.createdDate | date: 'longDate' }}</small
+												>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+			<li ngbNavItem *ngFor="let client of dealsList; let i = index" [hidden]="i === 0">
+				<a ngbNavLink
+					><i class="fa fa-user-tie"></i>&nbsp;{{ client.idNumber }} -
+					{{ client.companyName }}</a
+				>
+				<ng-template ngbNavContent>
+					<div class="mt-4">
+						<div
+							*ngFor="let deal of client?.deals | paginate: paginationOpt; let j = index"
+							class="card w-100"
+						>
+							<div class="card-header">
+								<div class="d-flex flex-row flex-nowrap">
+									<h6 class="card-title text-capitalize mt-0 mb-0 w-80">
+										<small><i class="text-muted fa fa-briefcase"></i></small>&nbsp;
+										{{ deal.referenceCode }}
+									</h6>
+									<a
+										role="button"
+										class="text-info w-20 mb-0 position-sticky text-right"
+										(click)="goToDetail(deal._id)"
+									>
+										<i class="fa fa-edit"></i>
+									</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-70">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-muted">Título</p>
+												<p class="mb-0 text-dark">
+													{{ deal.title }}
+												</p>
+											</small>
+										</span>
+									</div>
+									<div class="w-30">
+										<span>
+											<small class="text-right">
+												<p class="title mt-1 mb-0 text-muted">
+													<i class="fa fa-directions"></i>&nbsp;Próxima Acción
+												</p>
+												<p
+													class="mb-0"
+													[ngClass]="{
+														'text-danger': deal.nextActionToTake.dateHasPassed,
+														'text-success': !deal.nextActionToTake.dateHasPassed
+													}"
+												>
+													{{ deal.nextActionToTake.scheduleDate | date: 'shortDate' }},
+													{{ deal.nextActionToTake.scheduleHour }}
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-100">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-muted">Descripción</p>
+												<p class="text-dark mb-0">
+													{{ deal.comments }}
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+								<hr class="w-100" />
+								<div class="w-100 d-flex flex-nowrap flex-row justify-content-end">
+									<div class="mr-3">
+										<small class="text-muted">
+											<p class="mb-0">
+												<i class="fa fa-calendar"></i>&nbsp;Fecha de Creación
+											</p>
+											<span class="text-muted mb-0">
+												{{ deal.createdDate | date: 'longDate' }}
+											</span>
+										</small>
+									</div>
+									<div>
+										<small class="text-muted">
+											<p class="mb-0"><i class="fa fa-user"></i>&nbsp;Creado por</p>
+											<span class="text-muted mb-0">
+												{{ deal.createdBy.firstName }} {{ deal.createdBy.lastName }}
+											</span>
+										</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+		</ul>
+		<div [ngbNavOutlet]="nav"></div>
+		<pagination-controls
+			*ngIf="dealsList.length > paginationOpt.itemsPerPage"
+			class="text-right notranslate"
+			(pageChange)="pageChange($event)"
+			previousLabel="‹"
+			nextLabel="›"
+		></pagination-controls>
+	</div>
+</div>

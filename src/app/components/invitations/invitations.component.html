@@ -1,0 +1,345 @@
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item active component-header" aria-current="page">
+			<h4 class="text-muted"><i class="fa fa-address-book"></i>&nbsp;Invitaciones</h4>
+		</li>
+	</ol>
+</nav>
+
+<div class="admin-platform-container">
+	<div class="main-box mb-3">
+		<form
+			[formGroup]="filterForm"
+			class="row mb-2"
+			autocomplete="off"
+			(ngSubmit)="search()"
+		>
+			<div class="col-sm-12">
+				<div class="d-flex flex-row flex-nowrap justify-content-between">
+					<div class="search-header">
+						<h4 class="text-mutedw-50 mt-auto mb-0">Búsqueda</h4>
+					</div>
+
+					<div class="dropdown pt-3">
+						<a
+							class="mt-2 dropdown-toggle"
+							href="#"
+							id="navbarDropdown"
+							role="button"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							<i class="fa fa-filter"></i>
+							&nbsp;
+							<span *ngIf="userAs === 'stakeholder'">Recibidas</span>
+							<span *ngIf="userAs === 'invitedby'">Enviadas</span>
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a
+								class="dropdown-item text-center text-muted cursor-pointer"
+								(click)="filterChange('stakeholder')"
+							>
+								<div class="d-flex flex-row flex-nowrap">
+									<i class="mt-1 fa fa-mail-bulk"></i>
+									&nbsp; &nbsp;
+									<span>Recibidas</span>
+								</div>
+							</a>
+							<a
+								class="dropdown-item text-center text-muted cursor-pointer mb-1"
+								(click)="filterChange('invitedby')"
+							>
+								<div class="d-flex flex-row flex-nowrap">
+									<i class="mt-1 fa fa-paper-plane"></i>
+									&nbsp; &nbsp;
+									<span>Enviadas</span>
+								</div></a
+							>
+						</div>
+					</div>
+				</div>
+				<hr />
+			</div>
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="form-group col-sm-6">
+						<label class="mb-0"><small>Estado de la Invitación</small></label>
+						<ng-select
+							[items]="invitationStatusList"
+							bindValue="key"
+							bindLabel="value"
+							formControlName="invitationStatus"
+						></ng-select>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<label class="mb-0"><small>Correo Electrónico</small></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa fa-envelope"></i>
+								</span>
+							</div>
+							<input
+								type="text"
+								class="form-control"
+								id="name"
+								formControlName="email"
+								placeholder="Filtrar por email"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="mr-2 ml-auto pl-2 pr-2 d-flex flex-row flex-nowrap text-right justify-content-end bg-light w-fit-content"
+			>
+				<ng-template #searchTooltip
+					><span class="pl-1 pr-1 bg-transparent"
+						><i class="fa fa-info-circle text-info"></i>&nbsp;Buscar</span
+					></ng-template
+				>
+				<button
+					type="submit"
+					class="align-middle btn btn-outline-dark mt-2 mb-2"
+					(click)="search()"
+					placement="top"
+					[ngbTooltip]="searchTooltip"
+					tooltipClass="bg-transparent"
+				>
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="animated fadeIn">
+		<ul *ngIf="invitationsList.length">
+			<li *ngFor="let invitation of invitationsList; let i = index" class="p-1">
+				<div *ngIf="userAs === 'stakeholder'">
+					<div class="d-flex flex-row flex-nowrap justify-content-between">
+						<h5 class="text-dark-green ml-2 mb-0">
+							{{ invitation.invitationDate | date }}
+						</h5>
+
+						<span
+							class="badge m-1 d-block mt-1"
+							[ngClass]="{
+								'badge-success': invitation.invitationStatus === 'accepted',
+								'badge-danger': invitation.invitationStatus === 'revoked',
+								'badge-warning': invitation.invitationStatus === 'rejected',
+								'badge-muted': invitation.invitationStatus === 'stakeholderLeaves'
+							}"
+						>
+							<small class="m-1">
+								<i
+									class="fa"
+									[ngClass]="{
+										'fa-user-clock': invitation.invitationStatus === 'requested',
+										'fa-user-check': invitation.invitationStatus === 'accepted',
+										'fa-user-times': invitation.invitationStatus === 'rejected',
+										'fa-times-circle': invitation.invitationStatus === 'revoked',
+										'fa-sign-out': invitation.invitationStatus === 'stakeholderLeaves'
+									}"
+								></i
+								>&nbsp;
+								<span *ngIf="invitation.invitationStatus === 'requested'">
+									Solicitada</span
+								>
+								<span *ngIf="invitation.invitationStatus === 'accepted'"> Aceptada</span>
+								<span *ngIf="invitation.invitationStatus === 'rejected'"> Declinada</span>
+								<span *ngIf="invitation.invitationStatus === 'revoked'"> Revocada</span>
+								<span *ngIf="invitation.invitationStatus === 'stakeholderLeaves'">
+									Retirada</span
+								>
+							</small>
+						</span>
+					</div>
+					<hr class="hr-secondary mt-0 mb-0" />
+					<div class="invitation-box">
+						<a
+							class="cursor-pointer"
+							(click)="openUserInfoDetailModal(invitation.invitedby)"
+						>
+							<div class="d-block">
+								<h6 class="text-dark-green mb-0">
+									<img
+										[src]="invitation.invitedby.image"
+										alt=""
+										class="w-20 mg-thumbnail profile-image-small"
+										[ngClass]="{
+											'profile-image-status-created':
+												invitation.invitedby.status === userStatus.created,
+											'profile-image-status-confirmed':
+												invitation.invitedby.status === userStatus.confirmed
+										}"
+									/>&nbsp; {{ invitation.invitedby.firstName }}
+									{{ invitation.invitedby.lastName }}
+								</h6>
+								<p class="text-dark mt-0 mb-0" style="text-overflow: ellipsis">
+									<small>
+										{{ invitation.invitedby.email }}
+									</small>
+								</p>
+								<p class="text-dark mt-0 mb-0" style="text-overflow: ellipsis">
+									<small>
+										<i class="fa fa-map-marker"></i>&nbsp;
+										{{ invitation.invitedby.countryName }}
+									</small>
+								</p>
+							</div></a
+						>
+						<div
+							*ngIf="invitation.invitationStatus !== 'stakeholderLeaves'"
+							class="w-auto text-center d-flex flex-column flex-wrap bg-light p-1"
+						>
+							<div
+								*ngIf="invitation.invitationStatus === 'requested'"
+								class="w-auto text-center"
+							>
+								<button
+									class="btn btn-success mb-1 w-90 ml-auto mr-auto"
+									(click)="
+										acceptInvitation(invitation._id, invitation.communicationTracking)
+									"
+								>
+									<small><i class="fa fa-check-circle"></i>&nbsp;Aceptar</small>
+								</button>
+								<label
+									role="button"
+									class="text-danger cursor-pointer"
+									(click)="rejectInvitation(invitation._id)"
+								>
+									<small><i class="fa fa-times-circle"></i>&nbsp;Declinar</small>
+								</label>
+							</div>
+							<button
+								*ngIf="invitation.invitationStatus === 'accepted'"
+								class="btn btn-warning mb-1 ml-auto mr-auto"
+								(click)="leaveInvitation(invitation._id)"
+							>
+								<small><i class="fa fa-sign-out"></i>&nbsp;Abandonar</small>
+							</button>
+							<label
+								role="button"
+								class="text-muted mr-0 mb-0 cursor-pointer"
+								(click)="openTrackingDetailModal(invitation.communicationTracking._id)"
+							>
+								<small
+									><i class="fa fa-info-circle text-success"></i>&nbsp;Ver Registro</small
+								>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="userAs === 'invitedby'">
+					<div class="d-flex flex-row flex-nowrap justify-content-between">
+						<h5 class="text-dark-green ml-2 mb-0">
+							{{ invitation.invitationDate | date }}
+						</h5>
+
+						<span
+							class="badge m-1 d-block mt-1"
+							[ngClass]="{
+								'badge-success': invitation.invitationStatus === 'accepted',
+								'badge-danger': invitation.invitationStatus === 'revoked',
+								'badge-warning': invitation.invitationStatus === 'rejected',
+								'badge-info': invitation.invitationStatus === 'requested',
+								'badge-muted': invitation.invitationStatus === 'stakeholderLeaves'
+							}"
+						>
+							<small class="m-1">
+								<i
+									class="fa"
+									[ngClass]="{
+										'fa-user-clock': invitation.invitationStatus === 'requested',
+										'fa-user-check': invitation.invitationStatus === 'accepted',
+										'fa-user-times': invitation.invitationStatus === 'rejected',
+										'fa-times-circle': invitation.invitationStatus === 'revoked',
+										'fa-sign-out': invitation.invitationStatus === 'stakeholderLeaves'
+									}"
+								></i
+								>&nbsp;
+								<span *ngIf="invitation.invitationStatus === 'requested'">
+									Solicitada</span
+								>
+								<span *ngIf="invitation.invitationStatus === 'accepted'"> Aceptada</span>
+								<span *ngIf="invitation.invitationStatus === 'rejected'"> Declinada</span>
+								<span *ngIf="invitation.invitationStatus === 'revoked'"> Revocada</span>
+								<span *ngIf="invitation.invitationStatus === 'stakeholderLeaves'">
+									Retirada</span
+								>
+							</small>
+						</span>
+					</div>
+					<hr class="hr-secondary mt-0 mb-0" />
+					<div class="invitation-box">
+						<a
+							class="cursor-pointer"
+							(click)="openUserInfoDetailModal(invitation.stakeholder)"
+						>
+							<div class="d-block">
+								<h6 class="text-dark-green mb-0">
+									<img
+										[src]="invitation.stakeholder.image"
+										alt=""
+										class="w-20 mg-thumbnail profile-image-small"
+										[ngClass]="{
+											'profile-image-status-created':
+												invitation.stakeholder.status === userStatus.created,
+											'profile-image-status-confirmed':
+												invitation.stakeholder.status === userStatus.confirmed
+										}"
+									/>&nbsp; {{ invitation.stakeholder.firstName }}
+									{{ invitation.stakeholder.lastName }}
+								</h6>
+								<p class="text-dark mt-0 mb-0" style="text-overflow: ellipsis">
+									<small>
+										{{ invitation.stakeholder.email }}
+									</small>
+								</p>
+								<p class="text-dark mt-0 mb-0" style="text-overflow: ellipsis">
+									<small>
+										<i class="fa fa-map-marker"></i>&nbsp;
+										{{ invitation.invitedby.countryName }}
+									</small>
+								</p>
+							</div></a
+						>
+						<div class="w-auto text-center d-flex flex-column flex-wrap p-1 bg-light">
+							<button
+								*ngIf="
+									invitation.invitationStatus !== 'revoked' &&
+									invitation.invitationStatus !== 'stakeholderLeaves'
+								"
+								class="btn btn-outline-danger mb-1"
+								(click)="revokeInvitation(invitation._id)"
+							>
+								<small><i class="fa fa-times-circle"></i>&nbsp;Revocar</small>
+							</button>
+
+							<label
+								role="button"
+								class="text-muted mr-0 cursor-pointer"
+								(click)="openTrackingDetailModal(invitation.communicationTracking._id)"
+							>
+								<small
+									><i class="fa fa-info-circle text-success"></i>&nbsp;Ver Registro</small
+								>
+							</label>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div *ngIf="showDataNotFound" class="form-row mt-5 animated fadeIn">
+		<div class="col-sm-12 text-center align-middle">
+			<h4 class="text-muted mt-3 mb-3 w-100 text-center">
+				<i class="fa fa-bell"></i>&nbsp;No se han encontrado Invitaciones
+				{{ userAs === 'stakeholder' ? 'Recibidas' : 'Enviadas' }}.
+			</h4>
+		</div>
+	</div>
+</div>

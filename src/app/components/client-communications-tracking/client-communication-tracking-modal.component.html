@@ -1,0 +1,1108 @@
+<div class="modal-header">
+	<h4 [hidden]="dataId !== ''" class="modal-title text-dark-green">
+		Crear Nuevo Registro
+	</h4>
+	<h4 [hidden]="dataId === ''" class="modal-title text-dark-green">
+		Detalle del Registro
+	</h4>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>
+<div class="modal-body animated fadeIn">
+	<form [formGroup]="trackingForm" autocomplete="off">
+		<ul ngbNav #nav="ngbNav" class="nav-tabs">
+			<!--general data-->
+			<li ngbNavItem>
+				<a ngbNavLink><i class="fa fa-list-alt"></i>&nbsp;Datos Generales</a>
+				<ng-template ngbNavContent>
+					<div class="form-row mt-2">
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Seleccionar Cliente</small></label
+								>&nbsp;
+								<small
+									*ngIf="trackingForm.controls['client'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+
+								<input
+									*ngIf="userRole === 'stakeholder'"
+									class="form-control w-100"
+									placeHolder="Nombre del Cliente"
+									formControlName="clientName"
+								/>
+								<ng-select
+									*ngIf="!dataId || (userRole !== '' && userRole === 'owner')"
+									[items]="clientsCollection"
+									bindValue="_id"
+									bindLabel="companyName"
+									formControlName="client"
+									placeHolder="Seleccionar Cliente"
+									(change)="displaySelectedClientContacts($event)"
+								></ng-select>
+							</div>
+						</div>
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Tipo de Registro</small></label
+								>&nbsp;
+								<small
+									*ngIf="trackingForm.controls['client'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="trackingTypes"
+									bindValue="_id"
+									bindLabel="value"
+									formControlName="trackingType"
+									placeHolder="Seleccionar Tipo de Registro"
+									(change)="setRequiredFields($event)"
+								></ng-select>
+							</div>
+						</div>
+					</div>
+
+					<div
+						*ngIf="trackingForm.controls.trackingType.value === '0001'"
+						class="form-row"
+						[ngClass]="{
+							fadeIn: trackingForm.controls.trackingType.value === '0001',
+							fadeOut: trackingForm.controls.trackingType.value !== '0001'
+						}"
+					>
+						<div class="form-group col-sm-4">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Nombre del Contacto</small></label
+								>&nbsp;
+								<small
+									*ngIf="
+										trackingForm.controls['clientContact']?.errors?.required
+									"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+
+								<input
+									*ngIf="userRole === 'stakeholder'"
+									class="form-control w-100"
+									placeHolder="Nombre del Cliente"
+									formControlName="clientContactName"
+								/>
+								<ng-select
+									*ngIf="!dataId || (userRole !== '' && userRole === 'owner')"
+									[items]="clientContacts"
+									bindValue="idNumber"
+									bindLabel="fullName"
+									formControlName="clientContact"
+									placeHolder="Seleccionar Contacto"
+								></ng-select>
+							</div>
+						</div>
+						<div class="form-group col-sm-5">
+							<div class="form-group w-100">
+								<label class="mb-0"><small>Medio de Comunicación</small></label
+								>&nbsp;
+								<small
+									*ngIf="
+										trackingForm.controls['clientCommunicationWay'].errors
+											?.required
+									"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="communicationWaysCollection"
+									bindValue="_id"
+									bindLabel="value"
+									formControlName="clientCommunicationWay"
+									placeHolder="Seleccionar Medio de Entrada"
+								></ng-select>
+							</div>
+						</div>
+						<div class="form-group col-sm-3">
+							<div class="form-group float-right w-100">
+								<label class="mb-0"><small>Fecha de Contacto</small></label
+								>&nbsp;
+								<small
+									*ngIf="
+										trackingForm.controls['communicationDate'].errors?.required
+									"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="input-group date" data-provide="datepicker">
+									<input
+										type="date"
+										class="form-control"
+										[max]="maxSelectableDate"
+										formControlName="communicationDate"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div
+						*ngIf="
+							trackingForm.controls.trackingType.value === '0002' ||
+							trackingForm.controls.trackingType.value === '0003'
+						"
+						class="form-row animated"
+						[ngClass]="{
+							fadeIn:
+								trackingForm.controls.trackingType.value === '0002' ||
+								trackingForm.controls.trackingType.value === '0003',
+							fadeOut:
+								trackingForm.controls.trackingType.value !== '0002' &&
+								trackingForm.controls.trackingType.value !== '0003'
+						}"
+					>
+						<div class="form-group col-sm-12">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Titulo de la Nota</small></label
+								>&nbsp;
+								<small
+									*ngIf="trackingForm.controls['title'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<input
+									type="text"
+									class="form-control w-100"
+									id="title"
+									formControlName="title"
+									placeholder="Titulo del Registro"
+								/>
+							</div>
+						</div>
+					</div>
+					<!--recording audio -->
+					<div
+						*ngIf="trackingForm.controls.trackingType.value === '0003'"
+						class="animated form-group"
+						[ngClass]="{
+							fadeIn: trackingForm.controls.trackingType.value === '0003',
+							fadeOut: trackingForm.controls.trackingType.value !== '0003'
+						}"
+					>
+						<label class="mb-0"><small>Audio</small></label>
+						<div *ngIf="showRecordAudio" class="audio-recording" role="group">
+							<button
+								(click)="startRecording()"
+								class="btn"
+								[ngClass]="{
+									'btn-success':
+										audioTimeElapsed >= 0 &&
+										audioTimeElapsed < audioMaxTimeAllowed / 2,
+									'btn-warning':
+										audioTimeElapsed >= audioMaxTimeAllowed / 2 &&
+										audioTimeElapsed <
+											audioMaxTimeAllowed - audioMaxTimeAllowed / 3,
+									'btn-danger':
+										audioTimeElapsed >=
+											audioMaxTimeAllowed - audioMaxTimeAllowed / 3 &&
+										audioTimeElapsed <= audioMaxTimeAllowed
+								}"
+								[disabled]="isRecordingAudio"
+							>
+								<i
+									*ngIf="!isRecordingAudio"
+									class="fa fa-2x"
+									[ngClass]="{
+										'fa-microphone': !isRecordingAudio,
+										'fa-spin': isRecordingAudio,
+										'fa-spinner': isRecordingAudio
+									}"
+								></i>
+								<h2
+									*ngIf="isRecordingAudio"
+									class="text-light"
+									style="font-weight: bolder !important"
+								>
+									<span *ngIf="audioTimeElapsed < 10">0</span
+									>{{ audioTimeElapsed }}
+								</h2>
+							</button>
+							&nbsp;
+							<button
+								(click)="stopRecording()"
+								class="btn btn-outline-danger"
+								[disabled]="!isRecordingAudio"
+							>
+								<i class="fa fa-stop fa-2x"></i>
+							</button>
+						</div>
+						<div class="d-flex flex-row flex-nowrap justify-content-around">
+							<audio
+								controls=""
+								*ngIf="audioUrl"
+								class="mt-3"
+								[ngClass]="{
+									'w-90': trackingData._id && audioFile,
+									'w-100': !trackingData?._id || !audioFile
+								}"
+							>
+								<source [src]="sanitize(audioUrl)" type="audio/wav" />
+							</audio>
+							&nbsp;
+							<button
+								*ngIf="trackingData._id && audioFile"
+								class="btn btn-outline-success rounded-circle mt-4"
+								style="height: 40px"
+								(click)="returnPreviousAuto()"
+							>
+								<small
+									><span><i class="fa fa-undo"></i></span
+								></small>
+							</button>
+						</div>
+					</div>
+					<!--EO recording audio -->
+					<div
+						*ngIf="
+							trackingForm.controls.trackingType.value === '0001' ||
+							trackingForm.controls.trackingType.value === '0002'
+						"
+						class="form-row animated"
+						[ngClass]="{
+							fadeIn:
+								trackingForm.controls.trackingType.value === '0001' ||
+								trackingForm.controls.trackingType.value === '0002',
+							fadeOut:
+								trackingForm.controls.trackingType.value !== '0001' &&
+								trackingForm.controls.trackingType.value !== '0002'
+						}"
+					>
+						<div class="form-group col-md-12 mb-0">
+							<label class="mb-0"><small>Detalle</small></label
+							>&nbsp;
+							<small
+								*ngIf="trackingForm.controls['comments'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<textarea
+								class="form-control fixed-maintenance-textarea"
+								style="height: 10rem !important"
+								id="description"
+								rows="6"
+								cols="30"
+								maxlength="2500"
+								placeholder="Ingresar Detalle del Contacto Realizado"
+								formControlName="comments"
+								autocomplete="ccommets"
+							></textarea>
+							<div
+								*ngIf="
+									trackingForm.controls['comments'].value.length > 0 &&
+									trackingForm.controls['comments'].value.length < 15
+								"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios
+									debe tener como mínimo 15 caracteres..
+								</small>
+							</div>
+							<div
+								*ngIf="trackingForm.controls['comments'].errors?.maxlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios
+									tener como máximo 2500 caracteres..
+								</small>
+							</div>
+							<div class="textArea-char-counter text-muted pull-right">
+								<small class="">
+									*&nbsp;
+									{{
+										trackingForm.controls.comments.value.length
+											? trackingForm.controls.comments.value.length
+											: 0
+									}}
+									/ 2500
+								</small>
+							</div>
+						</div>
+					</div>
+					<hr class="w-100 mt-0 hr-secondary" />
+					<a
+						data-toggle="collapse"
+						href="#imagesCollapse"
+						role="button"
+						aria-expanded="false"
+						aria-controls="imagesCollapse"
+					>
+						<h6 class="title subsection mt-1 text-dark-green">
+							Imágenes &nbsp;
+							<i class="fa fa-caret-square-down"></i>
+						</h6>
+					</a>
+					<div class="mt-1 collapse p-1" id="imagesCollapse">
+						<div *ngIf="!uploadedFiles.length">
+							<div class="col-sm-12 text-center align-middle">
+								<h4 class="text-muted mt-3 mb-3 w-100 text-center">
+									<i class="fa fa-bell"></i>&nbsp;No existen imágenes
+									registrados
+								</h4>
+								<label
+									*ngIf="showImagesControls"
+									role="button"
+									class="mb-0 btn btn-outline-success cursor-pointer"
+								>
+									<small *ngIf="uploadedFiles.length < 3"
+										>Agregar Imágenes&nbsp;<input
+											type="file"
+											accept="image/png, image/jpeg"
+											(change)="onSelect($event)"
+											[disabled]="uploadedFiles.length === 3"
+											multiple
+											hidden />
+										<i
+											class="fa fa-plus-circle mt-1 grow"
+											aria-hidden="true"
+										></i
+									></small>
+									<small *ngIf="uploadedFiles.length === 3"
+										>Imágenes Asociadas
+										<i
+											class="fa fa-img mt-1 text-success grow"
+											aria-hidden="true"
+										></i
+									></small>
+								</label>
+							</div>
+						</div>
+
+						<label
+							*ngIf="showImagesControls && uploadedFiles.length"
+							class="mb-0 cursor-pointer"
+						>
+							<small *ngIf="uploadedFiles.length < 3" class="text-success"
+								><i
+									class="fa fa-plus-circle mt-1 text-success grow"
+									aria-hidden="true"
+								></i
+								>&nbsp;Agregar Imágenes&nbsp;<input
+									type="file"
+									accept="image/png, image/jpeg"
+									(change)="onSelect($event)"
+									[disabled]="uploadedFiles.length === 3"
+									multiple
+									hidden
+								/>
+							</small>
+							<small *ngIf="uploadedFiles.length === 3"
+								>Imágenes Asociadas
+								<i
+									class="fa fa-img mt-1 text-success grow"
+									aria-hidden="true"
+								></i
+							></small>
+						</label>
+						<label *ngIf="!showImagesControls" class="mb-0 cursor-pointer">
+							<small
+								>Imágenes Asociadas
+								<i
+									class="fa fa-img mt-1 text-success grow"
+									aria-hidden="true"
+								></i
+							></small>
+						</label>
+						<div
+							*ngIf="uploadedFiles.length"
+							class="drag-drop-content mt-0 mb-0"
+						>
+							<div class="flex-container">
+								<div
+									class="preview-img mt-2"
+									*ngFor="let image of uploadedFiles"
+								>
+									<a
+										role="button"
+										class="cursor-pointer"
+										(click)="openImageDetailModal(image)"
+										><img [src]="image" [alt]=""
+									/></a>
+									<button
+										*ngIf="showImagesControls"
+										type="button"
+										class="btn btn-danger remove-img animated fadeIn right-0"
+										(click)="removeImage(image)"
+									>
+										<small class="align-middle">
+											<i class="fa fa-times" aria-hidden="true"></i>
+										</small>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="w-100 mt-0 textArea-char-counter text-muted text-right">
+							<small>
+								{{ uploadedFiles.length }}
+								/ 3
+							</small>
+						</div>
+					</div>
+					<hr
+						*ngIf="trackingData?.changesLog?.length"
+						class="w-100 mt-0 hr-secondary"
+					/>
+
+					<!-- changelog -->
+					<div *ngIf="trackingData?.changesLog?.length" class="w-100">
+						<a
+							data-toggle="collapse"
+							href="#changeLogsToggle"
+							role="button"
+							aria-expanded="false"
+							aria-controls="changeLogsToggle"
+						>
+							<h6 class="title subsection mt-3 text-dark-green">
+								Control de Cambios &nbsp;
+								<i class="fa fa-caret-square-down"></i>
+							</h6>
+						</a>
+						<div class="mt-1 collapse" id="changeLogsToggle">
+							<div class="form-row">
+								<div class="w-100">
+									<ul class="comments-list">
+										<li
+											*ngFor="
+												let changeLog of trackingData.changesLog
+													| paginate: changeLogPaginationOpt;
+												let i = index
+											"
+										>
+											<div
+												[ngClass]="{
+													'comments-list-item-light': i % 2 === 0,
+													'comments-list-item-dark': i % 2 !== 0,
+													'mt-2': i > 0
+												}"
+											>
+												<div
+													class="d-flex flex-row flex-nowrap justify-content-around"
+												>
+													<a class="text-left text-success title w-50">
+														<h6 *ngIf="changeLog.valueKey === 'clientContact'">
+															<i class="fa fa-user-tie text-warning"></i>&nbsp;
+															Nombre del Contacto
+														</h6>
+														<h6
+															*ngIf="
+																changeLog.valueKey === 'clientCommunicationWay'
+															"
+														>
+															<i class="fa fa-megaphone text-success"></i>&nbsp;
+															Medio de Comunicación
+														</h6>
+														<h6
+															*ngIf="changeLog.valueKey === 'communicationDate'"
+														>
+															<i class="fa fa-calendar text-info"></i>&nbsp;
+															Fecha de Contacto
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'comments'">
+															<i class="fa fa-info-circle text-info"></i>&nbsp;
+															Detalle
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'stakeholders'">
+															<i class="fa fa-users text-info"></i>&nbsp;
+															Interesados
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'creation'">
+															<i class="fa fa-award text-success"></i
+															>&nbsp;Creación de Registro
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'title'">
+															<i class="fa fa-heading text-info"></i
+															>&nbsp;Título
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'audio'">
+															<i class="fa fa-volume-up text-info"></i
+															>&nbsp;Audio
+														</h6>
+														<h6 *ngIf="changeLog.valueKey === 'images'">
+															<i class="fa fa-image text-info"></i
+															>&nbsp;Imágenes
+														</h6>
+													</a>
+													<p class="text-right w-50 mb-0 text-muted">
+														<small
+															>{{ changeLog.date | date: "fullDate":"UTC" }},
+															{{ changeLog.date | date: "shortTime" }}</small
+														>
+													</p>
+												</div>
+												<hr
+													class="w-100 hr-comments-dark"
+													[ngClass]="{
+														'hr-comments-dark': i % 2 === 0,
+														'hr-comments-light': i % 2 !== 0
+													}"
+												/>
+												<p class="ml-2 mb-1 comments-paragraph">
+													{{ changeLog.description }}
+												</p>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div
+									*ngIf="
+										trackingData.changesLog.length >
+										changeLogPaginationOpt.itemsPerPage
+									"
+									class="col-sm-12 text-right"
+								>
+									<pagination-controls
+										class="text-right notranslate"
+										(pageChange)="changeLogPaginationPageChange($event)"
+										previousLabel="‹"
+										nextLabel="›"
+									></pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr
+						*ngIf="trackingData?.changesLog?.length"
+						class="w-100 mt-0 hr-secondary"
+					/>
+					<div class="form-row" *ngIf="trackingData && trackingData._id">
+						<div class="col-sm-10"></div>
+						<div class="form-group col-sm-2">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Estado</small></label
+								>&nbsp;
+								<small
+									*ngIf="trackingForm.controls['client'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="isArchived"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+			<!--stakeholders-->
+			<li ngbNavItem>
+				<a ngbNavLink><i class="fa fa-users"></i>&nbsp;Interesados</a>
+				<ng-template ngbNavContent>
+					<div *ngIf="canAddStakeholder" class="w-100 mt-2">
+						<div class="form-group w-100 mb-0">
+							<label class="mb-0">
+								<small> Búsqueda de Interesados </small>
+							</label>
+							<div class="d-block w-100 text-right">
+								<form [formGroup]="userSearchForm" autocomplete="off">
+									<input
+										class="form-control"
+										type="text"
+										formControlName="filter"
+										placeHolder="Buscar por Correo Electrónico"
+									/>
+								</form>
+								<div
+									class="floating-result-container"
+									*ngIf="showUserSearchResult"
+								>
+									<button
+										class="btn btn-danger"
+										(click)="showUserSearchResult = false"
+									>
+										<small><i class="fa fa-times"></i></small>
+									</button>
+									<ul>
+										<li
+											[hidden]="showSearchingMessage"
+											*ngFor="let item of availableUsers"
+										>
+											<a class="cursor-pointer" (click)="addStakeHolder(item)">
+												<div class="d-flex flex-row flex-nowrap p-1">
+													<div class="w-20 text-left">
+														<img
+															*ngIf="
+																item.status === 'selected' ||
+																item.status === userStatus.confirmed
+															"
+															class="img-thumbnail profile-image-small"
+															[ngClass]="{
+																'profile-image-status-created':
+																	item.status === userStatus.created,
+																'profile-image-status-confirmed':
+																	item.status === userStatus.confirmed
+															}"
+															[src]="
+																item.image ||
+																'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+															"
+															style="width: 54px; height: 54px"
+														/>
+														<img
+															*ngIf="item.status === userStatus.created"
+															class="img-thumbnail profile-image-small"
+															[ngClass]="{
+																'profile-image-status-created':
+																	item.status === userStatus.created,
+																'profile-image-status-confirmed':
+																	item.status === userStatus.confirmed
+															}"
+															[src]="
+																'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon_status_created.png'
+															"
+															style="width: 54px; height: 54px"
+														/>
+													</div>
+													<div class="w-80 text-left">
+														<h6
+															class="mb-0 ml-2"
+															[ngClass]="{
+																'text-muted':
+																	item.status === userStatus.created,
+																'text-dark-green':
+																	item.status !== userStatus.created
+															}"
+														>
+															{{ item?.fullName }}
+														</h6>
+														<p
+															class="mt-0 ml-2 mb-0"
+															[ngClass]="{
+																'text-muted':
+																	item.status === userStatus.created,
+																'text-dark': item.status !== userStatus.created
+															}"
+														>
+															<small>{{ item?.email }}</small>
+														</p>
+													</div>
+												</div></a
+											>
+										</li>
+										<li *ngIf="showInviteUserMessage">
+											<a class="cursor-pointer" (click)="addStakeHolder()">
+												<div class="d-flex flex-row flex-nowrap p-1">
+													<div class="w-100 p-1 text-left">
+														<h5 class="mb-0 ml-1 text-dark-green">
+															{{ userSearchForm.controls.filter.value }}
+														</h5>
+													</div>
+												</div>
+												<div class="text-left col-sm-12">
+													<p class="mt-0 mb-0">
+														<small
+															>El correo electrónico no se encuentra registrado,
+															enviaremos una invitación al correo electrónico
+															ingresado</small
+														>
+													</p>
+												</div>
+											</a>
+										</li>
+										<li *ngIf="showSearchingMessage">
+											<div class="d-flex flex-row flex-nowrap p-1">
+												<div class="w-100 p-1 text-left">
+													<h6 class="mb-0 ml-1 text-dark">
+														<i class="fa fa-exclamation-circle text-orange"></i
+														>&nbsp; No se ha encontrado un correo electrónico
+														relacionado
+													</h6>
+													<p class="mt-0 mb-0">
+														<small
+															>Ingrese un correo electrónico valido para enviar
+															una invitación</small
+														>
+													</p>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="w-100">
+						<div *ngIf="stakeholders.length > 0" class="form-row">
+							<div class="col-sm-12" style="overflow-y: scroll">
+								<ul class="mt-2 list">
+									<li *ngFor="let stakeholder of stakeholders; let i = index">
+										<div class="d-flex flex-row flex-nowrap p-1">
+											<div class="w-20 text-center">
+												<img
+													*ngIf="stakeholder.status === userStatus.confirmed"
+													class="img-thumbnail profile-image-small"
+													[ngClass]="{
+														'profile-image-status-created':
+															stakeholder.status === userStatus.created,
+														'profile-image-status-confirmed':
+															stakeholder.status === userStatus.confirmed
+													}"
+													[src]="
+														stakeholder.image ||
+														'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+													"
+												/>
+												<img
+													*ngIf="stakeholder.status === userStatus.created"
+													class="img-thumbnail profile-image-small"
+													[ngClass]="{
+														'profile-image-status-created':
+															stakeholder.status === userStatus.created,
+														'profile-image-status-confirmed':
+															stakeholder.status === userStatus.confirmed
+													}"
+													[src]="
+														'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon_status_created.png'
+													"
+												/>
+											</div>
+											<div class="w-80 text-left">
+												<a
+													class="cursor-pointer"
+													(click)="openUserInfoDetailModal(stakeholder)"
+												>
+													<h6
+														class="mb-0 ml-2"
+														[ngClass]="{
+															'text-muted':
+																stakeholder.status === userStatus.created,
+															'text-dark-green':
+																stakeholder.status !== userStatus.created
+														}"
+													>
+														<i
+															class="fa"
+															[ngClass]="{
+																'fa-user-check':
+																	stakeholder.invitationStatus === 'accepted',
+																'fa-user-clock':
+																	stakeholder.invitationStatus !== 'accepted',
+																'text-muted':
+																	stakeholder.invitationStatus !== 'accepted',
+																'text-dark-green':
+																	stakeholder.invitationStatus === 'accepted'
+															}"
+														></i
+														>&nbsp;
+														{{ stakeholder?.fullName }}
+													</h6>
+													<p
+														class="mt-0 ml-2 mb-0"
+														[ngClass]="{
+															'text-muted':
+																stakeholder.status === userStatus.created,
+															'text-dark':
+																stakeholder.status !== userStatus.created
+														}"
+													>
+														<small
+															><i class="fa fa-envelope"></i>&nbsp;{{
+																stakeholder?.email
+															}}</small
+														>
+													</p>
+												</a>
+											</div>
+											<div class="w-10 text-center align-middle">
+												<a
+													*ngIf="canRemoveStakeholders"
+													role="button"
+													class="text-danger cursor-pointer position-relative"
+													style="top: 0.6rem; right: 0.15rem; font-size: 20px"
+													(click)="removeStakeHolder(stakeholder.email)"
+												>
+													<i class="fa fa-trash"></i>
+												</a>
+											</div>
+										</div>
+										<hr
+											*ngIf="
+												stakeholders.length > 1 && i < stakeholders.length - 1
+											"
+											class="mb-0 mb-1 hr-secondary w-100"
+										/>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div *ngIf="!stakeholders.length" class="form-row">
+							<div class="col-sm-12 text-center align-middle">
+								<h4 class="text-muted mt-3 mb-3 text-center">
+									No hay Interesados asociados
+								</h4>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+			<!--comments-->
+			<li *ngIf="dataId" ngbNavItem>
+				<a ngbNavLink
+					><i class="fa fa-comments"></i>&nbsp;Comentarios&nbsp;<span
+						*ngIf="trackingComments.length"
+						>(&nbsp;<small class="text-dark aling-middle">{{
+							trackingComments.length
+						}}</small
+						>&nbsp;)</span
+					></a
+				>
+				<ng-template ngbNavContent>
+					<div class="col-sm-12">
+						<div *ngIf="trackingComments.length" class="row mt-2">
+							<!--comments-->
+							<ul class="comments-list">
+								<li *ngFor="let comment of trackingComments; let i = index">
+									<div
+										[ngClass]="{
+											'comments-list-item-light': i % 2 === 0,
+											'comments-list-item-dark': i % 2 !== 0,
+											'comments-list-item-error':
+												comment.sendingStatus === 'error',
+											'mt-2': i > 0
+										}"
+									>
+										<div
+											class="d-flex flex-row flex-nowrap justify-content-around"
+										>
+											<a
+												class="text-left title w-50 cursor-pointer"
+												(click)="openUserInfoDetailModal(comment.user)"
+											>
+												<h6 class="mb-0 text-dark-green">
+													<img
+														class="img-thumbnail profile-image-small"
+														[ngClass]="{
+															'profile-image-status-confirmed':
+																comment.user.status === userStatus.confirmed,
+															'profile-image-status-created':
+																comment.user.status !== userStatus.confirmed
+														}"
+														style="
+															width: 34px !important;
+															height: 34px !important;
+														"
+														[src]="
+															comment.user.image ||
+															'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+														"
+													/>&nbsp;
+													{{ comment.user.fullName }}
+												</h6>
+											</a>
+											<p class="text-right w-50 mb-0">
+												<small
+													>{{ comment.createdDate | date: "fullDate":"UTC" }},
+													{{ comment.createdDate | date: "shortTime" }}</small
+												>
+											</p>
+										</div>
+										<hr
+											class="w-100 hr-comments-dark"
+											[ngClass]="{
+												'hr-comments-dark': i % 2 === 0,
+												'hr-comments-light': i % 2 !== 0
+											}"
+										/>
+										<p class="ml-2 mb-1 comments-paragraph">
+											{{ comment.comments }}
+										</p>
+										<div
+											*ngIf="comment.sendingStatus !== 'none'"
+											class="w-100 pr-1 text-right"
+										>
+											<span
+												class="text-lightgrey"
+												*ngIf="comment.sendingStatus === 'sending'"
+											>
+												{{ "{ " }}
+												<small>
+													<i class="fa fa-spin fa-gear text-orange"></i>
+												</small>
+												{{ " }" }}
+											</span>
+											<a
+												*ngIf="comment.sendingStatus === 'error'"
+												class="text-danger"
+											>
+												<i class="fa fa-exclamation-circle"></i>&nbsp;No
+												enviado...
+											</a>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div *ngIf="!trackingComments.length">
+							<div class="col-sm-12 text-center align-middle">
+								<h4 class="text-muted mt-3 mb-3 w-100 text-center">
+									<i class="fa fa-bell"></i>&nbsp;No existen comentarios
+									registrados
+								</h4>
+							</div>
+						</div>
+						<hr class="w-100 hr-secondary" />
+						<div class="row">
+							<textarea
+								class="form-control fixed-maintenance-textarea"
+								style="height: 8rem !important"
+								id="trackingComments"
+								rows="6"
+								cols="30"
+								placeholder="Realizar Comentario"
+								formControlName="trackingComments"
+								autocomplete="ctrackingComments"
+								maxlength="250"
+							></textarea>
+							<div class="w-100 textArea-char-counter text-muted text-right">
+								<small>
+									*&nbsp;
+									{{
+										trackingForm.controls.trackingComments?.value?.length
+											? trackingForm.controls.trackingComments?.value?.length
+											: 0
+									}}
+									/ 250
+								</small>
+							</div>
+						</div>
+						<div class="row">
+							<div class="w-100 text-right">
+								<button
+									class="btn btn-outline-dark mt-3"
+									(click)="sendComment()"
+									[disabled]="
+										trackingForm.controls.trackingComments?.value?.length < 10
+									"
+								>
+									<i class="fa fa-send"></i>&nbsp;Enviar
+								</button>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+			<!--configuration-->
+			<li
+				*ngIf="!dataId || (userRole !== '' && userRole === 'owner')"
+				ngbNavItem
+			>
+				<a ngbNavLink><i class="fa fa-gear"></i>&nbsp;Configuración</a>
+				<ng-template ngbNavContent>
+					<ul class="col-sm-12 selectable-list">
+						<li
+							*ngIf="trackingForm.controls.trackingType.value === '0001'"
+							class=""
+						>
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">
+									Interesados pueden ver contactos del cliente
+								</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canSeeClientContactsList"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">Interesados pueden modificar este registro</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canModify"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">
+									Interesados pueden invitar a otras personas
+								</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canInvitePeople"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">
+									Interesados pueden eliminar otros invitados
+								</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canRemoveStakeholders"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</ng-template>
+			</li>
+		</ul>
+		<div [ngbNavOutlet]="nav"></div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button
+		*ngIf="userRole === 'stakeholder'"
+		type="button"
+		class="btn btn-warning"
+		(click)="leaveTracking()"
+		[disabled]="userRole !== 'stakeholder'"
+	>
+		<i class="fa fa-sign-out"></i>&nbsp;Abandonar Seguimiento</button
+	>&nbsp;
+	<button
+		*ngIf="showSaveButton"
+		type="submit"
+		class="btn btn-success"
+		(click)="save()"
+		[disabled]="trackingForm.invalid"
+	>
+		Guardar
+	</button>
+</div>

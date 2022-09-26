@@ -1,0 +1,216 @@
+<!-->landingpage menu<-->
+<nav
+  *ngIf="!showItems"
+  class="
+    navbar navbar-expand-lg navbar-light
+    bg-light
+    justify-content-between
+    show-movil
+  "
+>
+  <div class="d-flex flex-row">
+    <a class="navbar-brand w-20 " href="#">
+      <img src="https://absque-public-stuff.s3.amazonaws.com/clifoll/appico.png" alt="" />
+      <!--<a
+      role="button"
+      class="login-button mb-0 mt-auto align-bottom"
+      (click)="openLoginModal()"
+    >
+      <small>
+        <i class="fa fa-user"></i>
+      </small>
+    </a>-->
+    </a>
+
+    <button
+      *ngIf="showItems"
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#ecommerceNav"
+      aria-controls="ecommerceNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<!--desktop menu-->
+<nav
+  *ngIf="!showItems"
+  class="
+    navbar navbar-expand-lg navbar-light
+    bg-light
+    justify-content-between
+    show-desktop
+  "
+>
+  <div class="d-flex flex-row">
+    <a class="navbar-brand w-30" href="#">
+      <img src="https://absque-public-stuff.s3.amazonaws.com/clifoll/appico.png" alt="aaaa" />
+      <!--<a
+      role="button"
+      class="login-button mb-0 mt-auto align-bottom"
+      (click)="openLoginModal()"
+    >
+      <small>
+        <i class="fa fa-user"></i>
+      </small>
+    </a>-->
+    </a>
+  </div>
+</nav>
+
+<nav
+  *ngIf="showItems"
+  class="navbar navbar-expand-lg navbar-light animated fadeIn slow"
+>
+  <a class="navbar-brand w-20" href="#">
+    <img src="https://absque-public-stuff.s3.amazonaws.com/clifoll/appico.png" alt="" />
+    <!--<div *ngIf="!showItems" class="d-inline-flex mb-0 mt-auto align-bottom">
+      <a role="button" class="login-button" (click)="openLoginModal()">
+        <small>
+          <i class="fa fa-user"></i>
+        </small>
+      </a>
+    </div>-->
+  </a>
+  <button
+    *ngIf="showItems"
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav navbar-nav-options">
+      <li
+        class="nav-item ml-2 mr-2"
+        routerLinkActive="item-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/clients"> Mis Clientes </a>
+      </li>
+      <li
+        class="nav-item ml-2 mr-2"
+        routerLinkActive="item-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/clientstracking">
+          Seguimiento Clientes
+        </a>
+      </li>
+      <!-- 
+      <li
+        class="nav-item ml-2 mr-2"
+        routerLinkActive="item-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/products"> Productos </a>
+      </li>
+      -->
+    </ul>
+
+    <form class="show-desktop user-name">
+      <ul class="navbar-nav mt-0 ml-auto mr-0">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ><i
+              *ngIf="!sessionCacheSrv.getUserIsAdmin()"
+              class="fa fa-user"
+            ></i>
+            <i
+              *ngIf="sessionCacheSrv.getUserIsAdmin()"
+              class="fa fa-users-cog"
+            ></i
+            >&nbsp; {{ userName }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a
+              class="dropdown-item text-center cursor-pointer"
+              (click)="openMyInformationModal()"
+              ><i class="fa fa-id-card"></i>&nbsp;Mi Información</a
+            >
+            <div class="dropdown-divider"></div>
+            <a
+              class="dropdown-item text-center cursor-pointer"
+              (click)="openChangePasswordModal()"
+              ><i class="fa fa-key"></i>&nbsp;Cambiar Clave</a
+            >
+            <div class="dropdown-divider"></div>
+            <a
+              class="dropdown-item text-center cursor-pointer"
+              (click)="goToCloseAccount()"
+              ><i class="fa fa-user-times"></i>&nbsp;Cerrar Cuenta</a
+            >
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item">
+              <button
+                class="btn btn-outline-danger ml-auto mr-auto"
+                (click)="logout()"
+              ><i class="fa fa-lock"></i>&nbsp;
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </form>
+
+    <ul class="navbar-nav ml-2 show-movil">
+      <li class="nav-item">
+        <hr class="hr-secondary ml-0" />
+      </li>
+      <li class="nav-item w-100 d-flex">
+        <ul class="navbar-nav mt-3">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ><i
+                *ngIf="!sessionCacheSrv.getUserIsAdmin()"
+                class="fa fa-user"
+              ></i>
+              <i
+                *ngIf="sessionCacheSrv.getUserIsAdmin()"
+                class="fa fa-users-cog"
+              ></i
+              >&nbsp; {{ userName }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a
+                class="dropdown-item text-center cursor-pointer"
+                (click)="openChangePasswordModal()"
+                >Cambiar Clave</a
+              >
+            </div>
+          </li>
+        </ul>
+        <a
+          class="w-50 text-danger cursor-pointer text-right mr-1 mt-auto mb-1"
+          (click)="logout()"
+          >Cerrar Sesión
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

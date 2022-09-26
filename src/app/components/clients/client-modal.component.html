@@ -1,0 +1,411 @@
+<div class="modal-header">
+	<h4 [hidden]="dataId !== ''" class="modal-title text-dark-green">Crear Cliente</h4>
+	<h4 [hidden]="dataId === ''" class="modal-title text-dark-green">Detalle de Cliente</h4>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>
+<div class="modal-body animated fadeIn">
+	<form [formGroup]="clientForm" autocomplete="off">
+		<ul ngbNav #nav="ngbNav" class="nav-tabs">
+			<li ngbNavItem>
+				<a ngbNavLink><i class="fa fa-list-alt"></i>&nbsp;Datos Generales</a>
+				<ng-template ngbNavContent>
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Medio de Ingreso</small></label
+								>&nbsp;
+								<small
+									*ngIf="clientForm.controls['wayOfEntry'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									class="w-100"
+									[items]="waysOfEntriesCollection"
+									bindValue="_id"
+									bindLabel="value"
+									formControlName="wayOfEntry"
+									placeHolder="Seleccionar Medio de Entrada"
+								></ng-select>
+							</div>
+						</div>
+
+						<div class="form-group col-md-6 mb-0">
+							<label class="mb-0"><small>Numero de Identificación</small></label
+							>&nbsp;
+							<small
+								*ngIf="clientForm.controls['idNumber'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<small
+								*ngIf="clientForm.controls['idNumber'].status === 'PENDING'"
+								class="form-control-feedback mt-1 text-gold"
+							>
+								<i class="fa fa-spinner fa-spin"></i>
+							</small>
+							<input
+								type="text"
+								class="form-control text-capitalize"
+								id="cidnumber"
+								placeholder="Ingresar Numero de Identificación"
+								formControlName="idNumber"
+								autocomplete="cidnumber"
+								required
+							/>
+							<div
+								*ngIf="clientForm.controls['idNumber'].errors?.minlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Mínimo 2 caracteres..
+								</small>
+							</div>
+							<div
+								*ngIf="clientForm.controls['idNumber'].errors?.exists"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Número de identificación
+									registrado anteriormente..
+								</small>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label class="mb-0"><small>Nombre de Empresa</small></label
+							>&nbsp;
+							<small
+								*ngIf="clientForm.controls['companyName'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<input
+								type="text"
+								class="form-control text-capitalize"
+								id="ccompanyname"
+								placeholder="Ingresar Nombre de Empresa"
+								formControlName="companyName"
+								autocomplete="ccompanyname"
+								required
+							/>
+							<div
+								*ngIf="clientForm.controls['companyName'].errors?.minlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Mínimo 2 caracteres..
+								</small>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12 mb-0">
+							<label class="mb-0"><small>Formas de Contacto</small></label>
+							<div class="secondary-box">
+								<div class="form-row">
+									<div class="form-group col-sm-6">
+										<input
+											type="text"
+											class="form-control"
+											id="cmailaddress"
+											placeholder="Correo Electronico"
+											formControlName="email"
+											autocomplete="cmailaddress"
+										/>
+										<span
+											*ngIf="clientForm.controls['email'].errors?.email"
+											class="text-danger ml-0 mt-0 w-100"
+											><small>
+												<i class="fa fa-exclamation-circle"></i>&nbsp; Formato no valido.
+											</small></span
+										>
+									</div>
+									<div class="form-group col-sm-6">
+										<input
+											type="text"
+											class="form-control"
+											id="phoneNumber"
+											knifeOnlyNumbers
+											placeholder="Numero Telefonico"
+											formControlName="phoneNumber"
+											autocomplete="cphonenumber"
+										/>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-sm-12">
+										<textarea
+											class="form-control fixed-maintenance-textarea"
+											style="height: 10rem !important"
+											id="description"
+											rows="6"
+											cols="30"
+											placeholder="Direccion"
+											formControlName="address"
+											autocomplete="caddress"
+										></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-0">
+							<label class="mb-0"><small>Comentarios</small></label
+							>&nbsp;
+							<small
+								*ngIf="clientForm.controls['comments'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<textarea
+								class="form-control fixed-maintenance-textarea"
+								style="height: 10rem !important"
+								id="description"
+								rows="6"
+								cols="30"
+								placeholder="Ingresar Comentarios"
+								formControlName="comments"
+								autocomplete="ccommets"
+							></textarea>
+							<div
+								*ngIf="clientForm.controls['comments'].errors?.minlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe
+									tener como mínimo 20 caracteres..
+								</small>
+							</div>
+							<div
+								*ngIf="clientForm.controls['comments'].errors?.maxlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener
+									como máximo 250 caracteres..
+								</small>
+							</div>
+							<div class="textArea-char-counter text-muted pull-right">
+								<small class="">
+									*&nbsp;
+									{{
+										clientForm.controls.comments.value.length
+											? clientForm.controls.comments.value.length
+											: 0
+									}}
+									/ 250
+								</small>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100">
+								<label class="mb-0"><small>Fecha de Ingreso</small></label
+								>&nbsp;
+								<small
+									*ngIf="clientForm.controls['dateOfEntry'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="input-group date" data-provide="datepicker">
+									<input type="date" class="form-control" formControlName="dateOfEntry" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100">
+								<label class="mb-0"><small>Estado</small></label
+								>&nbsp;
+								<small
+									*ngIf="clientForm.controls['isActive'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									class="w-100"
+									[items]="[
+										{ value: true, label: 'Activo' },
+										{ value: false, label: 'Inactivo' }
+									]"
+									bindValue="value"
+									bindLabel="label"
+									formControlName="isActive"
+									placeHolder="Seleccionar Estado"
+								></ng-select>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+			<li ngbNavItem>
+				<a ngbNavLink><i class="fa fa-address-book"></i>&nbsp;Contactos</a>
+				<ng-template ngbNavContent>
+					<div *ngIf="contacts.length > 0" class="form-row">
+						<div class="w-100 mt-2">
+							<div class="w-100 d-flex flex-row flex-wrap justify-content-around">
+								<h6 class="mb-1 w-70">Lista de Contactos</h6>
+								&nbsp;<a
+									role="button"
+									class="cursor-pointer mb-1 text-success"
+									(click)="openContactDetailModal()"
+								>
+									<i class="fa fa-plus-circle"></i>&nbsp;Agregar Contacto
+								</a>
+							</div>
+							<ul class="selectable-list p-0" style="margin: 0px !important">
+								<li
+									*ngFor="
+										let contact of contacts | paginate: paginationOpt;
+										let i = index
+									"
+									class="d-block"
+								>
+									<div class="d-flex flex-row flex-nowrap">
+										<h5 class="text-dark-green w-90">
+											<i class="fa fa-user-tie"></i>&nbsp; {{ contact.firstName }}
+											{{ contact.lastName }}
+										</h5>
+										&nbsp;
+										<a
+											role="button"
+											class="text-info cursor-pointer w-auto m-auto text-center"
+											(click)="openContactDetailModal(contact)"
+										>
+											<i class="fa fa-pen"></i> </a
+										>&nbsp; &nbsp;
+										<a
+											role="button"
+											class="text-danger cursor-pointer w-auto m-auto text-center"
+											(click)="removeContact(contact.idNumber)"
+										>
+											<i class="fa fa-trash"></i>
+										</a>
+									</div>
+									<hr class="w-100 hr-secondary" />
+									<div
+										*ngIf="contact.email || contact.cellPhone"
+										class="col-sm-12 d-flex flex-wrap p-0"
+									>
+										<div *ngIf="contact.email" class="col-sm-8 text-left p-0">
+											<span class="text-muted"><small>Correo Electrónico</small></span>
+											<p class="text-dark">{{ contact.email }}</p>
+										</div>
+										<div *ngIf="contact.cellPhone" class="col-sm-4 text-left p-0">
+											<span class="text-muted"><small>Teléfono</small></span>
+											<p class="ml-1 text-dark">{{ contact.cellPhone }}</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<pagination-controls
+							*ngIf="contacts.length > paginationOpt.itemsPerPage"
+							class="text-right notranslate"
+							(pageChange)="pageChange($event)"
+							previousLabel="‹"
+							nextLabel="›"
+						></pagination-controls>
+					</div>
+					<div *ngIf="!contacts.length" class="form-row">
+						<div class="col-sm-12 text-center align-middle">
+							<h4 class="text-muted mt-3 mb-3 text-center">
+								El cliente no cuenta con Contactos asociados
+							</h4>
+							<button
+								class="text-center btn btn-success"
+								(click)="openContactDetailModal()"
+							>
+								<i class="fa fa-plus-circle"></i>&nbsp;Agregar Contacto
+							</button>
+						</div>
+					</div>
+				</ng-template>
+			</li>
+
+			<!--configuration-->
+			<li ngbNavItem>
+				<a ngbNavLink><i class="fa fa-gear"></i>&nbsp;Configuración</a>
+				<ng-template ngbNavContent>
+					<ul class="col-sm-12 selectable-list">
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">Mostrar número de identificación</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canShowIdNumber"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">Mostrar correo electrónico</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canShowEmailAddress"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+						<li class="">
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<h6 class="w-80">Mostrar número de teléfono</h6>
+								&nbsp;
+								<div class="button r switch-activator mt-1">
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="canShowPhoneNumber"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</ng-template>
+			</li>
+		</ul>
+		<div [ngbNavOutlet]="nav"></div>
+
+		<button
+			hidden
+			type="submit"
+			(click)="save()"
+			[disabled]="clientForm.invalid"
+		></button>
+	</form>
+</div>
+<div class="modal-footer">
+	<button
+		type="button"
+		class="btn btn-success"
+		(click)="save()"
+		[disabled]="clientForm.invalid"
+	>
+		Guardar
+	</button>
+</div>

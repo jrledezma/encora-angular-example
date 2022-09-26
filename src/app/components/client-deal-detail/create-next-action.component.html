@@ -1,0 +1,181 @@
+<div class="col-sm-12">
+	<form [formGroup]="nextActionForm">
+		<div class="form-row">
+			<div class="form-group col-sm-6 mb-0">
+				<div class="form-group float-right w-100">
+					<label class="mb-0"><small>Fecha de Recordatorio</small></label
+					>&nbsp;
+					<small
+						*ngIf="nextActionForm.controls.scheduleDate.errors?.required"
+						class="form-control-feedback mt-1 text-danger"
+						>*</small
+					>
+					<div class="input-group date" data-provide="datepicker">
+						<input
+							type="date"
+							class="form-control"
+							[min]="minSelectableDate"
+							formControlName="scheduleDate"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group col-sm-6 mb-0">
+				<div class="form-group float-right w-100">
+					<label class="mb-0"><small>Hora de Recordatorio</small></label
+					>&nbsp;
+					<small
+						*ngIf="nextActionForm.controls.scheduleHour.errors?.required"
+						class="form-control-feedback mt-1 text-danger"
+						>*</small
+					>
+					<div class="input-group date" data-provide="datepicker">
+						<input type="time" class="form-control" formControlName="scheduleHour" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-sm-6">
+				<div class="form-group w-100 mb-0">
+					<label class="mb-0"><small>Acción a Realizar</small></label
+					>&nbsp;
+					<small
+						*ngIf="nextActionForm.controls.actionToTake.errors?.required"
+						class="form-control-feedback mt-1 text-danger"
+						>*</small
+					>
+					<ng-select
+						[items]="actionsToTakeCollection"
+						bindValue="_id"
+						bindLabel="value"
+						formControlName="actionToTake"
+						placeHolder="Seleccionar Cliente"
+					></ng-select>
+				</div>
+			</div>
+			<div class="form-group col-sm-6">
+				<div class="form-group w-100 mb-0">
+					<label class="mb-0"><small>Contacto del Cliente</small></label
+					>&nbsp;
+					<small
+						*ngIf="nextActionForm.controls.clientContact.errors?.required"
+						class="form-control-feedback mt-1 text-danger"
+						>*</small
+					>
+					<ng-select
+						[items]="clientContacts"
+						bindValue="idNumber"
+						bindLabel="fullName"
+						formControlName="clientContact"
+						placeHolder="Seleccionar Contacto Cliente"
+					></ng-select>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12 mb-0">
+				<label class="mb-0"><small>Descripción</small></label
+				>&nbsp;
+				<small
+					*ngIf="nextActionForm.controls['trackingComments'].errors?.required"
+					class="form-control-feedback mt-1 text-danger"
+					>*
+				</small>
+				<textarea
+					class="form-control fixed-maintenance-textarea"
+					style="height: 12rem !important"
+					id="description"
+					rows="6"
+					cols="30"
+					maxlength="500"
+					placeholder="Ingresar Detalle del Contacto Realizado"
+					formControlName="trackingComments"
+					autocomplete="ctrackingComments"
+				></textarea>
+				<div
+					*ngIf="
+						nextActionForm.controls['trackingComments'].value?.length > 0 &&
+						nextActionForm.controls['trackingComments'].value?.length < 15
+					"
+					class="form-control-feedback mt-1"
+				>
+					<small class="text-danger">
+						<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe tener como
+						mínimo 15 caracteres..
+					</small>
+				</div>
+				<div
+					*ngIf="nextActionForm.controls['trackingComments'].errors?.maxlength"
+					class="form-control-feedback mt-1"
+				>
+					<small class="text-danger">
+						<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener como
+						máximo 500 caracteres..
+					</small>
+				</div>
+				<div class="textArea-char-counter text-muted pull-right mr-0">
+					<small style="font-size: 12px !important">
+						*&nbsp;
+						{{
+							nextActionForm.controls.trackingComments.value.length
+								? nextActionForm.controls.trackingComments.value.length
+								: 0
+						}}
+						/ 500
+					</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="form-group col-sm-6">
+				<div class="form-group w-100 mb-0">
+					<label class="mb-0"><small>Miembro del Equipo a Cargo</small></label
+					>&nbsp;
+					<small
+						*ngIf="
+							nextActionForm.controls.teamMemberInCharge.errors?.required ||
+							nextActionForm.controls.asignActionToTakeToSessionUser.errors?.required
+						"
+						class="form-control-feedback mt-1 text-danger"
+						>*</small
+					>
+					<div class="form-check pl-0 mb-2">
+						<div class="d-flex flex-row flex-nowrap justify-content-start">
+							<label class="w-80 mb-0 align-middle">
+								<small
+									[ngClass]="{
+										'text-success':
+											nextActionForm.controls.asignActionToTakeToSessionUser.value,
+										'text-muted':
+											!nextActionForm.controls.asignActionToTakeToSessionUser.value
+									}"
+									>Asignarme esta Acción a Tomar</small
+								>
+							</label>
+							<div class="button r switch-activator" style="margin-top: -7px !important">
+								<input
+									type="checkbox"
+									class="checkbox"
+									formControlName="asignActionToTakeToSessionUser"
+									(change)="asignActionToTakeToSessionUserCheckedChanged($event)"
+								/>
+								<div class="knobs"></div>
+								<div class="layer"></div>
+							</div>
+						</div>
+					</div>
+					<ng-select
+						[items]="teamMembers"
+						bindValue="_id"
+						bindLabel="fullName"
+						formControlName="teamMemberInCharge"
+						(change)="teamMemberInChargeChange($event)"
+						placeHolder="Seleccionar Cliente"
+					></ng-select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,58 @@
+/***************************************************
+*                                                  *
+*                  media query                     *
+*                                                  *
+***************************************************/
+.invitation-box {
+	top: 25% !important;
+    position: absolute;
+	width: 90% !important;
+}
+
+.invitation-box > hr {
+	width: 100% !important;
+	height: 0.5px !important;
+	background-color: #8f9491 !important;
+	margin: 20px auto 15px auto !important;
+}
+
+.invitation-box > div > img {
+	width: 84px !important;
+	height: 84px !important;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 350px) {
+}
+
+@media (min-width: 410px) {}
+
+@media (min-width: 576px) {
+}
+
+@media (min-width: 768px) {
+	.invitation-box {
+		/*margin: 15% auto !important;
+		width: 80% !important;*/
+        left: 4% !important;
+	}
+
+	.invitation-box > hr {
+		width: 80% !important;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .invitation-box {
+		width: 50% !important;
+        left: 25% !important;
+	}
+}
+
+@media (min-width: 1300px) {
+}

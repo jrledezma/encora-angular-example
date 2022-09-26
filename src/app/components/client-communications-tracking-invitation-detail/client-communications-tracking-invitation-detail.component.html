@@ -1,0 +1,32 @@
+<div class="admin-platform-container invitation-box">
+	<div class="d-flex flex-row flex-nowrap justify-content-center">
+		<img
+			[src]="invitationData?.invitedby?.image"
+			alt=""
+			class="mg-thumbnail profile-image-small mr-2"
+		/>
+		&nbsp;
+		<img
+			[src]="invitationData?.stakeholder?.image || 'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'"
+			alt=""
+			class="mg-thumbnail profile-image-small ml-2"
+		/>
+	</div>
+	<hr/>
+	<h4 class="text-dark text-center mt-2"> 
+		<a class="cursor-pointer text-orange"
+			>{{ invitationData?.invitedby?.firstName }}
+			{{ invitationData?.invitedby?.lastName }}</a
+		>
+		te ha invitado a colaborar
+	</h4>
+	<div class="d-flex flex-row flex-nowrap justify-content-center mt-4">
+		<button class="btn btn-success" (click)="acceptInvitation()">
+			<i class="fa fa-check-circle"></i>&nbsp;Aceptar Invitación
+		</button>
+		&nbsp;
+		<button class="btn btn-outline-dark" (click)="rejectInvitation()">
+			<i class="fa fa-times-circle"></i>&nbsp;Declinar
+		</button>
+	</div>
+</div>

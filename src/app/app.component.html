@@ -1,0 +1,85 @@
+<div class="w-100 d-flex flex-row flex-nowrap animated fadeIn slower">
+	<div *ngIf="showItems" class="w-18 show-desktop">
+		<header class="text-center pt-3">
+			<a href="#">
+				<img
+					class="m-auto"
+					style="width: 110px"
+					src="https://absque-public-stuff.s3.amazonaws.com/clifoll/appico.png"
+					alt=""
+				/>
+				<!--<div *ngIf="!showItems" class="d-inline-flex mb-0 mt-auto align-bottom">
+							  <a role="button" class="login-button" (click)="openLoginModal()">
+								<small>
+								  <i class="fa fa-user"></i>
+								</small>
+							  </a>
+							</div>-->
+			</a>
+			<!--<span>ng-sidebar</span>-->
+		</header>
+		<ng-sidebar-container>
+			<!-- A sidebar -->
+			<ng-sidebar
+				[opened]="true"
+				[position]="'left'"
+				[animate]="true"
+				[dock]="true"
+				[autoCollapseHeight]="true"
+				[autoCollapseWidth]="true"
+			>
+				<div ng-sidebar-content>
+					<section class="mt-3 pl-3">
+						<nav class="navbar">
+							<ul class="navbar-nav navbar-nav-options">
+								<li
+									class="nav-item ml-2 mr-2"
+									routerLinkActive="item-active"
+									[routerLinkActiveOptions]="{ exact: true }"
+								>
+									<a class="nav-link" routerLink="/clients">
+										<span class="fa fa-user-tie"></span>&nbsp;Clientes
+									</a>
+								</li>
+								<li
+									class="nav-item ml-2 mr-2"
+									routerLinkActive="item-active"
+									[routerLinkActiveOptions]="{ exact: true }"
+								>
+									<a class="nav-link" routerLink="/deals">
+										<span class="fa fa-briefcase"></span>&nbsp;Tratos
+									</a>
+								</li>
+								<li
+									class="nav-item ml-2 mr-2"
+									routerLinkActive="item-active"
+									[routerLinkActiveOptions]="{ exact: true }"
+								>
+									<a class="nav-link" routerLink="/invitations">
+										<span class="fa fa-address-book"></span>&nbsp;Invitaciones
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</section>
+				</div>
+			</ng-sidebar>
+		</ng-sidebar-container>
+	</div>
+	<div
+		[ngClass]="{ 'w-auto': showItems, 'w-100': !showItems, 'app-container': showItems }"
+	>
+		<app-navbar></app-navbar>
+		<div class="ml-1" style="min-height: calc(100vh - 250px)">
+			<!--
+				<app-shopping-controls *ngIf="showItems"></app-shopping-controls>
+			-->
+			<div [ngClass]="{ 'margin-from-navbar': showItems }">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="padding: 0">
+	<app-footer></app-footer>
+</div>

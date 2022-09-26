@@ -1,0 +1,282 @@
+[
+  {
+    "code": "grosery",
+    "name": "Alimentación",
+    "products": [
+      {
+        "code": "0001",
+        "name": "Café Rey Tradicional",
+        "description": "Cafe Rey con sabor y aroma tradicional",
+        "brand": "Café Rey",
+        "presentations": [
+          {
+            "weight": "500 gr",
+            "price": "950"
+          },
+          {
+            "weight": "750 gr",
+            "price": "1300"
+          },
+          {
+            "weight": "1 kl",
+            "price": "1500"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/grosery/0001.png"
+      },
+      {
+        "code": "0002",
+        "name": "Galletas Soda",
+        "description": "Galletas Soda Tradicionales",
+        "brand": "Pozuelo",
+        "presentations": [
+          {
+            "weight": "110 gr",
+            "price": "850"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/grosery/0002.png"
+      },
+      {
+        "code": "0003",
+        "name": "Queso Crema",
+        "description": "Queso Crema Original",
+        "brand": "Dos Pinos",
+        "presentations": [
+          {
+            "weight": "350 gr",
+            "price": "1500"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/grosery/0003.png"
+      },
+      {
+        "code": "0004",
+        "name": "Queso Crema",
+        "description": "Queso Crema Sabor Chipotle",
+        "brand": "Dos Pinos",
+        "presentations": [
+          {
+            "weight": "300 gr",
+            "price": "900"
+          },
+          {
+            "weight": "600 gr",
+            "price": "1500"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/grosery/0004.png"
+      },
+      {
+        "code": "0005",
+        "name": "Numar Light",
+        "description": "Mantequilla Numar Light",
+        "brand": "Numar",
+        "presentations": [
+          {
+            "weight": "492 gr",
+            "price": "1200"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/grosery/0005.png"
+      }
+    ]
+  },
+  {
+    "code": "pets",
+    "name": "Área de Mascotas",
+    "products": [
+      {
+        "code": "0006",
+        "name": "NS Lamb Meal & Rice Formula",
+        "description": "La fórmula Lamb Meal & Rice proporciona una nutrición super premium en un alimento científicamente formulado y fácil de digerir que ayuda a mantener una buena salud robusta, una piel flexible y pelaje de lujo.",
+        "brand": "Nutrisouce",
+        "presentations": [
+          {
+            "weight": "2.2 kl",
+            "price": "9000"
+          },
+          {
+            "weight": "8 kl",
+            "price": "15000"
+          },
+          {
+            "weight": "15 kl",
+            "price": "23000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/pets/0006.png"
+      },
+      {
+        "code": "0007",
+        "name": "NS Large Breed Puppy",
+        "description": "NutriSource® Large Breed Puppy Chicken & Rice Formula proporciona nutrición súper premium en un alimento formulado científicamente fácil de digerir diseñado para cachorros de razas que maduran a más de 50 libras.",
+        "brand": "Nutrisouce",
+        "presentations": [
+          {
+            "weight": "2.2 kl",
+            "price": "8500"
+          },
+          {
+            "weight": "8 kl",
+            "price": "13000"
+          },
+          {
+            "weight": "15 kl",
+            "price": "22000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/pets/0007.png"
+      },
+      {
+        "code": "0008",
+        "name": "NS small and medium Breed Puppy",
+        "description": "NutriSource® Small and Medium Breed Puppy es ideal para el crecimiento de cachorros de raza pequeña y mediana (razas que maduran menos de 50 libras) y proporciona una nutrición súper premium en un alimento formulado científicamente y fácil de digerir.",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "2.2 kl",
+            "price": "8200"
+          },
+          {
+            "weight": "8 kl",
+            "price": "15500"
+          },
+          {
+            "weight": "15 kl",
+            "price": "22500"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/pets/0008.png"
+      },
+      {
+        "code": "0009",
+        "name": "Cat & Kitten - Chiken Meal, Salmon and Liver Formula",
+        "description": "Harina de Pollo, Salmón y Hígado Gato y Gatito comida ofrece todo lo que su gato necesita en una fórmula natural adecuado para gatitos en crecimiento y los gatos adultos. Tiene gran pollo de gran degustación, el salmón y el hígado que los gatos aman.",
+        "brand": "Nutrisource",
+        "presentations": [
+          {
+            "weight": "4 kl",
+            "price": "11000"
+          },
+          {
+            "weight": "10 kl",
+            "price": "17500"
+          },
+          {
+            "weight": "23 kl",
+            "price": "29000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/pets/0009.png"
+      },
+      {
+        "code": "0010",
+        "name": "Nutrisource Cat Senior Weight Management",
+        "description": "Proporciona la nutrición super premium. Tiene el gran sabor de pollo que los gatos aman. Formulado con ingredientes naturales y la última nutrición felina científica disponible, ofrece un cuidado completo para la alta y menos activos en los gatos de peso.",
+        "brand": "Nutrisource",
+        "presentations": [
+          {
+            "weight": "4 kl",
+            "price": "10000"
+          },
+          {
+            "weight": "10 kl",
+            "price": "17000"
+          },
+          {
+            "weight": "23 kl",
+            "price": "27500"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/categories/pets/0010.png"
+      }
+    ]
+  },
+  {
+    "code": "otherproducts",
+    "name": "Otros Productos",
+    "products": [
+      {
+        "code": "0001",
+        "name": "Camisa y Saco de Vestir",
+        "description": "Camisa de cuadros y saco para toda ocación",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "350 gr",
+            "price": "45000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/demo/580b57fbd9996e24bc43bf71.png"
+      },
+      {
+        "code": "0002",
+        "name": "Camisa de Vestir",
+        "description": "Camisa de cuadros color azul oscuro",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "100 gr",
+            "price": "13000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/demo/adsfdsfewffdsfdsf.png"
+      },
+      {
+        "code": "0003",
+        "name": "Camisa de Vestir",
+        "description": "Camisa de cuadros color blanco",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "100 gr",
+            "price": "10000"
+          }
+        ],
+        "iva": false,
+        "picture": "assets/img/demo/afasfsadfsdfdsfrewr.png"
+      },
+      {
+        "code": "0004",
+        "name": "Pantalón de Mezclilla",
+        "description": "Pantalon informal de mezclilla",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "200 gr",
+            "price": "1000"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/demo/43rewfwerewfdsf.png"
+      },
+      {
+        "code": "0005",
+        "name": "Zapatos de Vestir",
+        "description": "Zapatos de vestir, tipo mocasin, colo cafe",
+        "brand": "brand Ejemplo",
+        "presentations": [
+          {
+            "weight": "250 gr",
+            "price": "3300"
+          }
+        ],
+        "iva": true,
+        "picture": "assets/img/demo/580b57fbd9996e24bc43bf4b.png"
+      }
+    ]
+  }
+]

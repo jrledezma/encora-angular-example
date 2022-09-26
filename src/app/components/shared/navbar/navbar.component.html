@@ -1,0 +1,267 @@
+<!-->landingpage menu<-->
+<nav class="navbar navbar-expand-lg animated fadeIn slow"
+ [ngClass]="{'navbar-light': showItems,'navbar-dark': !showItems}">
+	<a class="navbar-brand w-20 show-movil" href="#">
+		<img
+			src="https://absque-public-stuff.s3.amazonaws.com/clifoll/appico.png"
+			alt=""
+		/>
+		<!--<div *ngIf="!showItems" class="d-inline-flex mb-0 mt-auto align-bottom">
+      <a role="button" class="login-button" (click)="openLoginModal()">
+        <small>
+          <i class="fa fa-user"></i>
+        </small>
+      </a>
+    </div>-->
+	</a>
+	<button
+		*ngIf="showItems"
+		class="navbar-toggler"
+		type="button"
+		data-toggle="collapse"
+		data-target="#navbarNav"
+		aria-controls="navbarNav"
+		aria-expanded="false"
+		aria-label="Toggle navigation"
+	>
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<button
+		*ngIf="!showItems"
+		class="btn btn-outline-success float-right show-movil"
+		(click)="openLoginModal()"
+		style="width: fit-content !important"
+	>
+		<small>Ingresar</small>
+	</button>
+	<div *ngIf="showItems" class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav navbar-nav-options show-movil">
+			<li
+				class="nav-item ml-2 mr-2"
+				routerLinkActive="item-active"
+				[routerLinkActiveOptions]="{ exact: true }"
+			>
+				<a class="nav-link" routerLink="/clients">
+					<span class="fa fa-user-tie"></span>&nbsp;Clientes
+				</a>
+			</li>
+			<li
+				class="nav-item ml-2 mr-2"
+				routerLinkActive="item-active"
+				[routerLinkActiveOptions]="{ exact: true }"
+			>
+				<a class="nav-link" routerLink="/deals">
+					<span class="fa fa-briefcase"></span>&nbsp;Tratos
+				</a>
+			</li>
+			<li
+				class="nav-item ml-2 mr-2"
+				routerLinkActive="item-active"
+				[routerLinkActiveOptions]="{ exact: true }"
+			>
+				<a class="nav-link" routerLink="/invitations">
+					<span class="fa fa-address-book"></span>&nbsp;Invitaciones
+				</a>
+			</li>
+			<!-- 
+      <li
+        class="nav-item ml-2 mr-2"
+        routerLinkActive="item-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/products"> Productos </a>
+      </li>
+      -->
+		</ul>
+
+		<form class="show-desktop user-name w-100 text-right">
+			<ul class="navbar-nav mt-0 ml-auto mr-0">
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						id="navbarDropdown"
+						role="button"
+						data-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"
+					>
+						<img [src]="userImage" class="user-image" />
+						&nbsp; {{ userName }}
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a
+							class="dropdown-item text-center cursor-pointer"
+							(click)="openMyInformationModal()"
+						>
+							<div class="d-flex flex-row flex-nowrap justify-content-around">
+								<i class="fa fa-id-card mt-1"></i>&nbsp;<span
+									>Cuenta de Usuario</span
+								>
+							</div>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a
+							class="dropdown-item text-center cursor-pointer"
+							(click)="openChangePasswordModal()"
+						>
+							<div class="d-flex flex-row flex-nowrap justify-content-around">
+								<i class="fa fa-key mt-1"></i>&nbsp;<span>Cambiar Clave</span>
+							</div>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a
+							class="dropdown-item text-center cursor-pointer"
+							(click)="goToCloseAccount()"
+						>
+							<div
+								class="d-flex flex-row flex-nowrap justify-content-around text-danger"
+							>
+								<i class="fa fa-user-times mt-1"></i>&nbsp;<span
+									>Cerrar Cuenta</span
+								>
+							</div></a
+						>
+						<div class="dropdown-divider"></div>
+						<div class="dropdown-item">
+							<button
+								class="btn btn-outline-danger ml-auto mr-auto"
+								(click)="logout()"
+							>
+								<i class="fa fa-lock"></i>&nbsp; Cerrar Sesión
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+
+		<ul class="navbar-nav ml-2 show-movil">
+			<li class="nav-item">
+				<hr class="hr-secondary ml-0" />
+			</li>
+			<li class="nav-item w-100 d-flex">
+				<ul class="navbar-nav mt-1">
+					<li class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle"
+							href="#"
+							id="navbarDropdown"
+							role="button"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							<i
+								*ngIf="!sessionCacheSrv.getUserIsAdmin()"
+								class="fa fa-user"
+							></i>
+							<i
+								*ngIf="sessionCacheSrv.getUserIsAdmin()"
+								class="fa fa-users-cog"
+							></i
+							>&nbsp; {{ userName }}
+						</a>
+						<div
+							class="dropdown-menu mobile-dropdown-menu"
+							aria-labelledby="navbarDropdown"
+						>
+							<a
+								class="dropdown-item text-center cursor-pointer mb-1"
+								(click)="openMyInformationModal()"
+								><div
+									class="d-flex flex-row flex-nowrap justify-content-around"
+								>
+									<i class="fa fa-id-card mt-1"></i>&nbsp;<span
+										>Cuenta de Usuario</span
+									>
+								</div></a
+							>
+							<div class="dropdown-divider"></div>
+							<a
+								class="dropdown-item text-center cursor-pointer mt-1 mb-1"
+								(click)="openChangePasswordModal()"
+								><div
+									class="d-flex flex-row flex-nowrap justify-content-around"
+								>
+									<i class="fa fa-key mt-1"></i>&nbsp;<span>Cambiar Clave</span>
+								</div></a
+							>
+							<div class="dropdown-divider"></div>
+							<a
+								class="dropdown-item text-center cursor-pointer mt-1 mb-1"
+								(click)="goToCloseAccount()"
+								><div
+									class="d-flex flex-row flex-nowrap justify-content-around text-warning"
+								>
+									<i class="fa fa-user-times mt-1"></i>&nbsp;<span
+										>Cerrar Cuenta</span
+									>
+								</div></a
+							>
+							<div class="dropdown-divider"></div>
+							<div class="dropdown-item">
+								<button
+									class="btn btn-danger ml-auto mr-auto mt-2"
+									(click)="logout()"
+								>
+									<i class="fa fa-lock"></i>&nbsp; Cerrar Sesión
+								</button>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div *ngIf="!showItems" class="w-100 animated fadeIn slower">
+		<div class="float-right" style="margin-right: 12% !important">
+			<form
+				class="form-inline my-2 my-lg-0 show-desktop w-100"
+				[formGroup]="signInForm"
+				autocomplete="off"
+			>
+				<div class="form-row">
+					<input
+						class="form-control mr-sm-2"
+						type="email"
+						placeholder="Correo Eléctronico"
+						formControlName="email"
+					/>
+					<input
+						[hidden]="forgotPassword"
+						class="form-control mr-sm-2 animated slow"
+						[ngClass]="{
+							'fade-out': forgotPassword,
+							'fade-in': !forgotPassword
+						}"
+						type="password"
+						placeholder="Contraseña"
+						formControlName="password"
+					/>
+					<button
+						[disabled]="signInForm.invalid"
+						type="submit"
+						class="btn btn-outline-success my-2 my-sm-0"
+						(click)="action()"
+					>
+						<i *ngIf="!forgotPassword" class="fa fa-sign-in"></i>
+						<i *ngIf="forgotPassword" class="fa fa-paper-plane"></i>
+					</button>
+				</div>
+			</form>
+			<div class="form-row mt-1 mb-1 show-desktop">
+				<div class="col-sm-12 text-right">
+					<a class="mt-1 cursor-pointer" (click)="setForgotPassword()">
+						<small *ngIf="!forgotPassword" class="text-warning"
+							>¿Olvidó su contraseña?</small
+						>
+						<small *ngIf="forgotPassword" class="text-info"
+							><i class="fa fa-arrow-circle-o-left"></i>&nbsp;Volver...</small
+						>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>

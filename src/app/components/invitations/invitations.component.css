@@ -1,0 +1,106 @@
+ul {
+	max-height: 25rem !important;
+	overflow-x: scroll !important;
+	list-style-type: none !important;
+	padding: 0 !important;
+	border-radius: 0.25em !important;
+	border-color: #d9d9d9 !important;
+	border-width: .5px !important;
+	border-style: solid !important;
+}
+
+li {
+	border-bottom-width: .5px !important;
+	border-bottom-style: solid !important;
+	border-bottom-color: #d9d9d9 !important;
+	margin-bottom: 7.5px !important;
+}
+
+li:last-child {
+	border: none !important
+}
+
+h6::after {
+	margin-right: 7px !important;
+	margin-top: 10px !important;
+}
+
+.invitation-box {
+	padding: 0.5em !important;
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: nowrap !important;
+	justify-content: space-between !important;
+}
+
+.invitation-box > .d-block{
+	width: 85% !important;
+}
+
+.invitation-box > hr {
+	width: 100% !important;
+	height: 0.5px !important;
+	background-color: #8f9491 !important;
+	margin: 20px auto 15px auto !important;
+}
+
+.invitation-box > a > div > h6 > img {
+	margin-top: 0 !important;
+	width: 22px !important;
+	height: 22px !important;
+}
+/***************************************************
+*                                                  *
+*                  media query                     *
+*                                                  *
+***************************************************/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 350px) {
+	ul {
+		max-height: 30rem !important;
+	}
+}
+
+@media (min-width: 410px) {
+	ul {
+		max-height: 34rem !important;
+	}
+}
+
+@media (min-width: 576px) {
+}
+
+@media (min-width: 768px) {
+	ul {
+		max-height: 48rem !important;
+	}
+	.invitation-box {
+		/*margin: 15% auto !important;
+		width: 80% !important;*/
+		left: 4% !important;
+	}
+
+	.invitation-box > hr {
+		width: 80% !important;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	ul {
+		max-width: 70% !important;
+		margin: auto !important;
+		max-height: 40rem !important;
+	}
+	.invitation-box {
+		left: 25% !important;
+	}
+}
+
+@media (min-width: 1300px) {
+}

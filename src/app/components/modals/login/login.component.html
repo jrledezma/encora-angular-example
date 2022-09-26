@@ -1,0 +1,115 @@
+<div class="animated fadeIn slow">
+	<div class="modal-body">
+		<div class="col-sm-12">
+			<form
+				[formGroup]="signInForm"
+				class="animated fadeIn slow"
+				autocomplete="off"
+			>
+				<div class="animated fadeIn slow" *ngIf="!forgotPassword">
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<label for=""> Correo Eléctronico </label>
+							<input
+								type="email"
+								class="form-control w-100 text-lowercase"
+								formControlName="email"
+							/>
+							<span
+								*ngIf="signInForm.controls['email'].errors?.email"
+								class="text-danger ml-0 mt-0 w-100"
+								><small>
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Formato no
+									valido.
+								</small></span
+							>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12 mb-0">
+							<label for=""> Contraseña </label>
+							<input
+								type="password"
+								class="form-control w-100 mb-0"
+								formControlName="password"
+							/>
+						</div>
+					</div>
+					<div class="form-row mb-2">
+						<div class="col-sm-12 text-right">
+							<a
+								class="text-dark-green mt-1 cursor-pointer"
+								(click)="setForgotPassword()"
+							>
+								<small>Olvidó su contraseña?</small>
+							</a>
+						</div>
+					</div>
+					<button type="submit" hidden (click)="logIn()"></button>
+				</div>
+				<!--forgot password-->
+			</form>
+			<form
+				[formGroup]="passwordRecoveyForm"
+				class="animated fadeIn slow"
+				autocomplete="off"
+			>
+				<div *ngIf="forgotPassword">
+					<div class="form-row">
+						<div class="form-group col-sm-12 mb-0">
+							<label for=""> Correo Eléctronico </label>
+							<input
+								type="email"
+								class="form-control w-100 text-lowercase mb-0"
+								formControlName="email"
+							/>
+						</div>
+					</div>
+					<div class="form-row mb-2">
+						<div class="col-sm-12 text-left">
+							<a
+								class="text-dark-green mt-1 cursor-pointer"
+								(click)="setForgotPassword()"
+							>
+								<small>
+									<i class="fa fa-arrow-circle-o-left"></i>
+									&nbsp;Volver...
+								</small>
+							</a>
+						</div>
+					</div>
+				</div>
+				<button type="submit" hidden (click)="recoverPassword()"></button>
+			</form>
+			<div class="modal-footer">
+				<button
+					*ngIf="!forgotPassword"
+					type="button"
+					class="btn btn-outline-success w-100"
+					[disabled]="signInForm.invalid"
+					(click)="logIn()"
+				>
+					<i class="fa fa-sign-in"></i>&nbsp;Ingresar
+				</button>
+				<button
+					*ngIf="forgotPassword"
+					type="button"
+					class="btn btn-outline-success w-100"
+					[disabled]="passwordRecoveyForm.invalid"
+					(click)="recoverPassword()"
+				>
+					<i class="fa fa-paper-plane"></i>&nbsp;Recuperar Contraseña
+				</button>
+			</div>
+		</div>
+	</div>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>

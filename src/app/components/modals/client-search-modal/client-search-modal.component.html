@@ -1,0 +1,181 @@
+<div class="modal-header">
+  <h4 class="modal-title text-dark-green">Busqueda de Clientes</h4>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>
+<div class="modal-body animated fadeIn">
+  <div class=" secondary-box mb-3">
+    <form
+      class="row mb-2"
+      [formGroup]="filterForm"
+      autocomplete="off"
+      (ngSubmit)="search()"
+    >
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="input-group col-sm-12">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fa fa-address-card"></i>
+              </span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              formControlName="idNumber"
+              placeholder="Filtrar por Id"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <a
+          data-toggle="collapse"
+          href="#clientSearchSecondaryFilters"
+          role="button"
+          aria-expanded="false"
+          aria-controls="clientSearchSecondaryFilters"
+        >
+          <h5 class="title subsection mt-3">
+            Filtros Adicionales &nbsp;
+            <i class="fa fa-caret-square-down"></i>
+          </h5>
+        </a>
+        <div class="mt-1 collapse" id="clientSearchSecondaryFilters">
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-filter"></i>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  formControlName="firstName"
+                  placeholder="Filtrar por Nombre"
+                />
+              </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+              <div class="input-group ">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-filter"></i>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  formControlName="lastName"
+                  placeholder="Filtrar por Apellido"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label class="mb-0"><small>Numero Telefonico</small></label>
+              <input
+                knifeOnlyNumbers
+                type="text"
+                class="form-control w-100"
+                id="name"
+                formControlName="cellPhone"
+                placeholder="Filtrar por Numero Telefonico"
+              />
+            </div>
+            <div class="form-group col-sm-6">
+              <div class="form-group float-right w-100">
+                <label class="mb-0"><small>Correo Electronico</small></label>
+                <input
+                  type="text"
+                  class="form-control w-100"
+                  id="email"
+                  formControlName="email"
+                  placeholder="Filtrar por Correo Electronico"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label class="mb-0"><small>Medio de Ingreso</small></label>
+              <ng-select
+                class="w-100"
+                [items]="waysOfEntriesCollection"
+                bindValue="_id"
+                bindLabel="value"
+                formControlName="wayOfEntry"
+              ></ng-select>
+            </div>
+            <div class="form-group col-sm-6">
+              <div class="form-group float-right w-100">
+                <label class="mb-0"><small>Fecha de Ingreso</small></label>
+                <div class="input-group date" data-provide="datepicker">
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="dateOfEntry"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="search-header align-middle">
+          <div class="w-100 text-right">
+            <button
+              type="submit"
+              class="col-sm-2 align-middle btn btn-outline-dark"
+              (click)="search()"
+            >
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table ">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col"># Identificacion</th>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col" class="w-10"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of clientsList">
+            <th scope="row">{{client.idNumber}}</th>
+            <td>{{client.companyName}}</td>
+            <td>
+              <button class="btn btn-dark" (click)="selectClient(client)">
+                <i
+                  class="fa
+                    fa-check-circle"
+                ></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

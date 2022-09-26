@@ -1,0 +1,120 @@
+<div class="animated fadeIn slow login-box">
+  <div class="card p-0">
+    <div
+      class="card-header ml-0 mr-0 w-100"
+      style="background-color: #474747 !important"
+    >
+      <h1 class="text-muted w-100 align-middle text-center text-lightgreen">
+        <img src="assets/img/appico.png" alt="" class="login-header" />CLIFOLL</h1>
+    </div>
+    <div class="card-body col-sm-12 mt-3">
+      <form
+        [formGroup]="signInForm"
+        class="animated fadeIn slow"
+        autocomplete="off"
+      >
+        <div class="animated fadeIn slow" *ngIf="!forgotPassword">
+          <div class="form-row">
+            <div class="form-group col-sm-12">
+              <label for=""> Correo Eléctronico </label>
+              <input
+                type="email"
+                class="form-control w-100 text-lowercase"
+                formControlName="email"
+              />
+              <span
+                *ngIf="signInForm.controls['email'].errors?.email"
+                class="text-danger ml-0 mt-0 w-100"
+                ><small>
+                  <i class="fa fa-exclamation-circle"></i>&nbsp; Formato no valido.
+                </small></span
+              >
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-12 mb-0">
+              <label for=""> Contraseña </label>
+              <input
+                type="password"
+                class="form-control w-100 mb-0"
+                formControlName="password"
+              />
+            </div>
+          </div>
+          <div class="form-row mb-2">
+            <div class="col-sm-12 text-right">
+              <a
+                class="text-danger mt-1 cursor-pointer"
+                (click)="setForgotPassword()"
+              >
+                <small>Olvidó su contraseña?</small>
+              </a>
+            </div>
+          </div>
+          <button type="submit" hidden (click)="logIn()"></button>
+        </div>
+        <!--forgot password-->
+      </form>
+      <form
+        [formGroup]="passwordRecoveyForm"
+        class="animated fadeIn slow"
+        autocomplete="off"
+      >
+        <div *ngIf="forgotPassword">
+          <div class="form-row">
+            <div class="form-group col-sm-12 mb-0">
+              <label for=""> Correo Eléctronico </label>
+              <input
+                type="email"
+                class="form-control w-100 text-lowercase mb-0"
+                formControlName="email"
+              />
+            </div>
+          </div>
+          <div class="form-row mb-2">
+            <div class="col-sm-12 text-left">
+              <a
+                class="text-dark mt-1 cursor-pointer"
+                (click)="setForgotPassword()"
+              >
+                <small>
+                  <i class="fa fa-arrow-circle-o-left"></i>
+                  &nbsp;Volver...
+                </small>
+              </a>
+            </div>
+          </div>
+        </div>
+        <button type="submit" hidden (click)="recoverPassword()"></button>
+      </form>
+      <div class="w-100">
+        <button
+          *ngIf="!forgotPassword"
+          type="button"
+          class="btn btn-outline-success ml-auto mr-auto w-100"
+          [disabled]="signInForm.invalid"
+          (click)="logIn()"
+        >
+          Ingresar
+        </button>
+        <button
+          *ngIf="forgotPassword"
+          type="button"
+          class="btn btn-outline-success ml-auto mr-auto w-100"
+          [disabled]="passwordRecoveyForm.invalid"
+          (click)="recoverPassword()"
+        >
+          Recuperar Contraseña
+        </button>
+        <!--&nbsp;<button
+          *ngIf="!forgotPassword"
+          type="button"
+          class="btn btn-danger"
+          (click)="activeModal.close()"
+        >
+          Cerrar
+        </button>-->
+      </div>
+    </div>
+  </div>
+</div>

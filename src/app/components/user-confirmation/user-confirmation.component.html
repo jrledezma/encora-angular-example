@@ -1,0 +1,233 @@
+<div class="admin-platform-container m-auto regitration-user">
+	<div *ngIf="!hiddenControls" class="w-100 m-auto text-center">
+		<h2 class="mt-3 text-dark-green">Bienvenido a CLIFOLL</h2>
+		<p class="text-dark">
+			Por favor llena los siguientes datos para finalizar la inscripción
+		</p>
+	</div>
+	<div *ngIf="hiddenControls" class="w-100 m-auto text-center">
+		<h2 class="mt-3 text-dark-green">Recuperar Cuenta</h2>
+		<p class="text-dark">
+			Por favor ingresa tu contraseña para recuperar tu contraseña
+		</p>
+	</div>
+	<br />
+	<div class="m-auto main-box p-0 col-sm-12">
+		<div class="row">
+			<div class="col-sm-12">
+				<form [formGroup]="registerUserForm" autocomplete="off" class="p-3">
+					<div class="form-row profile-image-div">
+						<label
+							class="image-input w-100 text-center"
+							[ngClass]="{ 'cursor-pointer': !hiddenControls }"
+						>
+							<input
+								*ngIf="!hiddenControls"
+								type="file"
+								class=""
+								accept="image/png, image/jpeg"
+								(change)="onSelect($event)"
+								hidden
+							/>
+							<img
+								class="img-thumbnail profile-image"
+								style="position: relative; border-radius: 50%; top: -20px"
+								[src]="userImage"
+							/>
+						</label>
+					</div>
+					<hr class="w-100" />
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label for=""><small>Primer Nombre</small> </label>
+							<small
+								*ngIf="registerUserForm.controls['firstName'].errors?.required"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="text"
+								class="form-control w-100"
+								formControlName="firstName"
+							/>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for=""><small>Apellidos</small> </label>
+							<small
+								*ngIf="registerUserForm.controls['lastName'].errors?.required"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="text"
+								class="form-control w-100"
+								formControlName="lastName"
+							/>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<div class="form-group w-100">
+								<label class="mb-0"><small>Selecciona tu País</small></label
+								>&nbsp;
+								<small
+									*ngIf="
+										registerUserForm.controls['countryCode'].errors?.required
+									"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="countryList"
+									bindValue="code"
+									bindLabel="name"
+									formControlName="countryCode"
+									placeHolder=""
+								></ng-select>
+							</div>
+						</div>
+						<div class="form-group col-sm-6">
+							<label class="mb-0"><small>Número de Teléfono</small></label
+							>&nbsp;
+							<small
+								*ngIf="
+									registerUserForm.controls['phoneNumber'].errors?.required
+								"
+								class="form-control-feedback mt-1 text-danger"
+								>*</small
+							>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-phone-alt"></i>
+									</span>
+								</div>
+								<input
+									type="text"
+									class="form-control"
+									knifeOnlyNumbers
+									id="phoneNumber"
+									formControlName="phoneNumber"
+									placeholder=""
+								/>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label> <small>Contraseña </small></label
+							><small
+								*ngIf="registerUserForm.controls['password'].errors?.required"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="password"
+								class="form-control w-100"
+								formControlName="password"
+								maxlength="18"
+							/>
+							<small
+								*ngIf="
+									registerUserForm.controls['password'].errors?.passwordStrengh
+								"
+								class="text-danger"
+							>
+								<i class="fa fa-exclamation-triangle"></i>
+								&nbsp;<span class="font-weight-bold"
+									>La contraseña debe contar con:</span
+								>
+								<ul>
+									<li>Una letra mayúscula</li>
+									<li>Caracteres especiales ! @ # $ & * + %</li>
+									<li>un número</li>
+									<li>Mínimo 8 caracteres de longitud</li>
+								</ul>
+							</small>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for=""> <small>Confirmar Contraseña </small></label
+							><small
+								*ngIf="
+									registerUserForm.controls['confirmPassword'].errors?.required
+								"
+								class="text-danger"
+							>
+								&nbsp;*
+							</small>
+							<input
+								type="password"
+								class="form-control w-100"
+								formControlName="confirmPassword"
+								maxlength="18"
+							/>
+							<small
+								*ngIf="
+									registerUserForm.controls['confirmPassword'].errors
+										?.confirmPassword
+								"
+								class="text-danger"
+							>
+								&nbsp;Las contraseñas no coinciden
+							</small>
+						</div>
+					</div>
+
+					<div *ngIf="!hiddenControls" class="form-row mb-2 editor-container">
+						<quill-editor class="w-100" formControlName="about"> </quill-editor>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<div class="">
+								<input
+									type="checkbox"
+									class="cursor-pointer"
+									formControlName="acceptingTermsAndConditions"
+								/>
+								&nbsp;
+
+								<label
+									>Acepto los
+									<a
+										class="cursor-pointer text-dark-green"
+										(click)="openTermsAndConditions()"
+										> Términos y Condiciones de Uso</a
+									>.</label
+								>
+							</div>
+						</div>
+					</div>
+
+					<button type="submit" hidden (click)="saveData()"></button>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-right">
+				<button
+					type="button"
+					class="btn btn-outline-success"
+					[disabled]="
+						registerUserForm.invalid ||
+						registerUserForm.controls.acceptingTermsAndConditions.value ===
+							false
+					"
+					(click)="saveData()"
+				>
+					<span *ngIf="!hiddenControls"
+						><i class="fa fa-check"></i>&nbsp;Finalzar Registro</span
+					>
+					<span *ngIf="hiddenControls"
+						><i class="fa fa-key"></i>&nbsp;Recuperar Cuenta</span
+					>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

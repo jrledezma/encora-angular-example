@@ -1,0 +1,174 @@
+<div class="modal-header">
+  <h4 *ngIf="data" class="modal-title text-dark-green">Nuevo Contacto</h4>
+  <h4 *ngIf="!data" class="modal-title text-dark-green">Detalle de Contacto</h4>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>
+<div class="modal-body animated fadeIn">
+  <form [formGroup]="contactForm" autocomplete="off">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label class="mb-0"><small>Primer Nombre</small></label
+        >&nbsp;
+        <small
+          *ngIf="contactForm.controls['firstName'].errors?.required"
+          class="form-control-feedback mt-1 text-danger"
+          >*
+        </small>
+        <input
+          type="text"
+          class="form-control text-capitalize"
+          id="ccfname"
+          placeholder="Ingresar Nombre"
+          formControlName="firstName"
+          autocomplete="ccfname"
+          required
+        />
+        <div
+          *ngIf="contactForm.controls['firstName'].errors?.minlength"
+          class="form-control-feedback mt-1"
+        >
+          <small class="text-danger">
+            <i class="fa fa-exclamation-circle"></i>&nbsp; Mínimo 2 caracteres..
+          </small>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label class="mb-0"><small>Apellidos</small></label
+        >&nbsp;
+        <small
+          *ngIf="contactForm.controls['lastName'].errors?.required"
+          class="form-control-feedback mt-1 text-danger"
+          >*
+        </small>
+        <input
+          type="text"
+          class="form-control text-capitalize"
+          id="cclname"
+          placeholder="Ingresar Apellidos"
+          formControlName="lastName"
+          autocomplete="cclname"
+          required
+        />
+        <div
+          *ngIf="contactForm.controls['lastName'].errors?.minlength"
+          class="form-control-feedback mt-1"
+        >
+          <small class="text-danger">
+            <i class="fa fa-exclamation-circle"></i>&nbsp; Mínimo 2 caracteres..
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-sm-12 mb-0">
+        <label class="mb-0"><small>Formas de Contacto</small></label>
+        <div class="secondary-box">
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <input
+                type="text"
+                class="form-control"
+                id="ccemail"
+                placeholder="Correo Electronico"
+                formControlName="email"
+                autocomplete="ccemail"
+              />
+              <span
+                *ngIf="contactForm.controls['email'].errors?.email"
+                class="text-danger ml-0 mt-0 w-100"
+                ><small>
+                  <i class="fa fa-exclamation-circle"></i>&nbsp; Formato no
+                  valido.
+                </small></span
+              >
+            </div>
+            <div class="form-group col-sm-6">
+              <input
+                type="text"
+                class="form-control"
+                id="cellPhone"
+                knifeOnlyNumbers
+                placeholder="Numero Telefonico"
+                formControlName="cellPhone"
+                autocomplete="ccfcellphone"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        <label class="mb-0"><small>Comentarios</small></label
+        >&nbsp;
+        <small
+          *ngIf="contactForm.controls['comments'].errors?.required"
+          class="form-control-feedback mt-1 text-danger"
+          >*
+        </small>
+        <textarea
+          class="form-control fixed-maintenance-textarea"
+          style="height: 10rem !important"
+          id="description"
+          rows="6"
+          cols="30"
+          placeholder="Ingresar Comentarios"
+          formControlName="comments"
+        ></textarea>
+        <div
+          *ngIf="contactForm.controls['comments'].errors?.minlength"
+          class="form-control-feedback mt-1"
+        >
+          <small class="text-danger">
+            <i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe
+            tener como mínimo 20 caracteres..
+          </small>
+        </div>
+        <div
+          *ngIf="contactForm.controls['comments'].errors?.maxlength"
+          class="form-control-feedback mt-1"
+        >
+          <small class="text-danger">
+            <i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener
+            como máximo 250 caracteres..
+          </small>
+        </div>
+        <div class="textArea-char-counter text-muted pull-right">
+          <small class="">
+            *&nbsp;
+            {{
+              contactForm.controls.comments?.value?.length
+                ? contactForm.controls.comments.value.length
+                : 0
+            }}
+            / 250
+          </small>
+        </div>
+      </div>
+    </div>
+    <button
+      hidden
+      type="submit"
+      (click)="save()"
+      [disabled]="contactForm.invalid"
+    ></button>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="save()"
+    [disabled]="contactForm.invalid"
+  >
+    Guardar
+  </button>
+</div>

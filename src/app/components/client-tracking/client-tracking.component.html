@@ -1,0 +1,544 @@
+<div class="admin-platform-container">
+	<div class="w-100 component-header  bg-lightgrey mb-3 d-flex flex-row flex-wrap justify-content-between">
+		<h2 class="mb-auto title align-middle w-80">
+			<label
+				role="button"
+				class="text-muted cursor-pointer"
+				(click)="router.navigateByUrl('/clientstracking')"
+				><small><i class="fa fa-caret-square-left"></i></small></label
+			>&nbsp;Detalle de Seguimiento
+		</h2>
+		&nbsp;
+		<div class="dropdown pt-3">
+			<a
+				class="mt-2 dropdown-toggle"
+				href="#"
+				id="navbarDropdown"
+				role="button"
+				data-toggle="dropdown"
+				aria-haspopup="true"
+				aria-expanded="false"
+			>
+				<i class="fa fa-filter"></i>
+				&nbsp;
+				<span *ngIf="trackingStatus === 'all'">Todos</span>
+				<span *ngIf="trackingStatus === 'active'">Activos</span>
+				<span *ngIf="trackingStatus === 'archived'">Archivados</span>
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<a
+					class="dropdown-item text-center text-muted cursor-pointer"
+					(click)="filterChange('all')"
+				>
+					<div class="d-flex flex-row flex-nowrap">
+						<i class="mt-1 fa fa-book"></i>
+						&nbsp; &nbsp;
+						<span>Todos</span>
+					</div>
+				</a>
+				<a
+					class="dropdown-item text-center text-muted cursor-pointer mb-1"
+					(click)="filterChange('active')"
+				>
+					<div class="d-flex flex-row flex-nowrap">
+						<i class="mt-1 fa fa-folder-open"></i>
+						&nbsp; &nbsp;
+						<span>Activos</span>
+					</div></a
+				>
+				<a
+					class="dropdown-item text-center text-muted cursor-pointer"
+					(click)="filterChange('archived')"
+				>
+					<div class="d-flex flex-row flex-nowrap">
+						<i class="mt-1 fa fa-archive"></i>
+						&nbsp; &nbsp;
+						<span>Archivados</span>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="animated fadeIn">
+		<div class="card">
+			<div class="card-header" style="background-color: #fafafa !important">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="search-header d-block">
+							<h4 class="title mt-auto text-dark-green w-100">
+								{{ clientTrackingDetail?.client?.companyName }}
+							</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body pl-1 pr-1">
+				<div class="col-sm-12 pl-0 pr-0">
+					<div class="d-flex flex-row flex-wrap">
+						<div class="col-sm-4">
+							<span class="text-dark-green"><small>Número ID</small></span>
+							<h5>{{ clientTrackingDetail?.client?.idNumber }}</h5>
+						</div>
+						<div class="col-sm-4">
+							<span class="text-dark-green"
+								><small>Correo Electrónico</small></span
+							>
+							<h5>{{ clientTrackingDetail?.client?.email }}</h5>
+						</div>
+						<div class="col-sm-4">
+							<span class="text-dark-green"><small>Teléfono</small></span>
+							<h5>{{ clientTrackingDetail?.client?.phoneNumber }}</h5>
+						</div>
+					</div>
+				</div>
+				<div
+					*ngIf="clientTrackingDetail?.client?.ownClient"
+					class="mr-1 ml-auto pl-2 pr-2 d-flex flex-row flex-nowrap text-right justify-content-end bg-light w-fit-content"
+				>
+					<ng-template #newCommunication
+						><span class="pl-1 pr-1 bg-transparent"
+							><i class="fa fa-info-circle text-info"></i>&nbsp;Crear
+							comunicación con cliente</span
+						></ng-template
+					>
+					<button
+						type="button"
+						class="align-middle btn btn-outline-success mt-2 mb-2"
+						(click)="openNewCommunicationModal('0001')"
+						placement="top"
+						[ngbTooltip]="newCommunication"
+						tooltipClass="bg-transparent"
+					>
+						<i class="fa fa-address-book"></i></button
+					>&nbsp;
+					<ng-template #newTextNote
+						><span class="pl-1 pr-1 bg-transparent"
+							><i class="fa fa-info-circle text-info"></i>&nbsp;Crear nota de
+							texto</span
+						></ng-template
+					>
+					<button
+						type="button"
+						class="align-middle btn btn-outline-success mt-2 mb-2"
+						(click)="openNewCommunicationModal('0002')"
+						[ngbTooltip]="newTextNote"
+						tooltipClass="bg-transparent"
+					>
+						<i class="fa fa-sticky-note"></i></button
+					>&nbsp;
+					<ng-template #newVoiceNote
+						><span class="pl-1 pr-1 bg-transparent"
+							><i class="fa fa-info-circle text-info"></i>&nbsp;Crear nota de
+							voz</span
+						></ng-template
+					><button
+						type="button"
+						class="align-middle btn btn-outline-success mt-2 mb-2"
+						(click)="openNewCommunicationModal('0003')"
+						[ngbTooltip]="newVoiceNote"
+						tooltipClass="bg-transparent"
+					>
+						<i class="fa fa-volume-up"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<ul ngbNav #nav="ngbNav" class="nav-tabs mt-3">
+			<!--contact with client-->
+			<li ngbNavItem>
+				<a ngbNavLink
+					><i class="fa fa-address-book"></i>&nbsp;Contacto con Clientes
+					&nbsp;<span *ngIf="clientCommunicationsCollection.length > 0"
+						>( {{ clientCommunicationsCollection.length }} )</span
+					></a
+				>
+				<ng-template ngbNavContent>
+					<div *ngIf="!gotCommunications" class="form-row mt-5 animated fadeIn">
+						<div class="col-sm-12 text-center align-middle">
+							<h4 class="text-muted mt-3 mb-3 w-100 text-center">
+								<i class="fa fa-bell"></i>&nbsp;No se ha creado Contacto con el
+								Cliente
+							</h4>
+						</div>
+					</div>
+
+					<div *ngIf="gotCommunications" class="w-100">
+						<a
+							data-toggle="collapse"
+							href="#secondaryFilters"
+							role="button"
+							aria-expanded="false"
+							aria-controls="secondaryFilters"
+						>
+							<h5 class="title subsection mt-3">
+								Filtros de Búsqueda &nbsp;
+								<i class="fa fa-caret-square-down"></i>
+							</h5>
+						</a>
+						<div class="mt-1 collapse p-1" id="secondaryFilters">
+							<form
+								class="row mb-2"
+								[formGroup]="communicationFilterForm"
+								autocomplete="off"
+								(ngSubmit)="filterCommunicationHistory()"
+							>
+								<div class="col-sm-12">
+									<div class="form-row">
+										<div class="form-group col-sm-6">
+											<label class="mb-0"
+												><small>Medio de Comunicación</small></label
+											>
+											<ng-select
+												class="w-100"
+												[items]="waysOfEntriesCollection"
+												bindValue="_id"
+												bindLabel="value"
+												formControlName="communicationWay"
+											></ng-select>
+										</div>
+										<div class="form-group col-sm-6">
+											<label class="mb-0"
+												><small>Fecha de Comunicación</small></label
+											>
+											<div class="input-group date" data-provide="datepicker">
+												<input
+													type="date"
+													class="form-control"
+													formControlName="communicationDate"
+												/>
+											</div>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-sm-12 text-right">
+											<button
+												class="btn btn-dark m-auto"
+												(click)="filterCommunicationHistory()"
+											>
+												<i class="fa fa-search"></i>&nbsp;Buscar
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<hr class="w-100 mt-0 hr-secondary" />
+					</div>
+					<div class="animated fadeIn card-view mb-3 justify-content-between">
+						<div
+							*ngFor="
+								let item of clientCommunicationsCollection
+									| paginate: paginationOptForCommuincations
+							"
+							class="card"
+						>
+							<div class="card-header">
+								<h5
+									*ngIf="item.communicationDate"
+									class="card-title text-capitalize"
+								>
+									<i class="fa fa-id-card text-muted"></i>&nbsp;
+									{{ item.communicationDate | date: "fullDate":"UTC" }}
+								</h5>
+								<h5
+									*ngIf="!item.communicationDate"
+									class="card-title text-capitalize text-muted"
+								>
+									Fecha no Disponible
+								</h5>
+							</div>
+							<div class="card-body">
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-60">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-dark-green">Contacto</p>
+												<p>
+													{{ item.clientContact }}
+												</p>
+											</small>
+										</span>
+									</div>
+									<div class="w-40">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-dark-green">
+													Forma de Contacto
+												</p>
+												<p
+													class="text-muted"
+													*ngIf="item.clientCommunicationWay?.value"
+												>
+													{{ item.clientCommunicationWay?.value }}
+												</p>
+												<p
+													class="text-muted"
+													*ngIf="!item.clientCommunicationWay?.value"
+												>
+													Dato Oculto
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+
+								<div class="w-100 d-flex flex-nowrap flex-row">
+									<div class="w-100">
+										<span class="float-left">
+											<small>
+												<p class="title mt-1 mb-0 text-dark-green">
+													Comentarios
+												</p>
+												<p class="card-comments">
+													{{ item.comments }}
+												</p>
+											</small>
+										</span>
+									</div>
+								</div>
+								<div class="w-100 text-right">
+									<span
+										*ngIf="item.images?.length > 0"
+										class="badge badge-info"
+									>
+										<i class="fa fa-image"></i>
+										&nbsp;{{ item.images.length }}
+										{{ item.images.length > 1 ? "Imágenes" : "Imagen" }}
+									</span>
+									&nbsp;
+									<span
+										class="badge"
+										[ngClass]="{
+											'cursor-pointer': clientTrackingDetail?.client?.ownClient,
+											'badge-muted': item.isArchived,
+											'badge-success': !item.isArchived
+										}"
+										(click)="archiveAction(item)"
+									>
+										<i
+											class="fa"
+											[ngClass]="{
+												'fa-archive': item.isArchived,
+												'fa-folder-open': !item.isArchived
+											}"
+										></i>&nbsp;
+										{{item.isArchived? "Archivado": "Activo"}}
+									</span>
+								</div>
+								<hr class="hr-secondary w-100 ml-0" />
+								<button
+									type="button"
+									class="btn btn-outline-dark w-100 mt-3 mb-0 position-sticky"
+									(click)="openDetailModal(item._id)"
+								>
+									<i class="fa fa-eye"></i>&nbsp; Observar Detalle
+								</button>
+							</div>
+						</div>
+					</div>
+					<pagination-controls
+						*ngIf="
+							clientCommunicationsCollection.length >
+							paginationOptForCommuincations.itemsPerPage
+						"
+						class="text-right notranslate"
+						(pageChange)="communicationPageChange($event)"
+						previousLabel="‹"
+						nextLabel="›"
+					></pagination-controls>
+				</ng-template>
+			</li>
+			<!--notes-->
+			<li ngbNavItem>
+				<a ngbNavLink
+					><i class="fa fa-book"></i>&nbsp;Notas &nbsp;<span
+						*ngIf="clientNotesCollection.length > 0"
+						>( {{ clientNotesCollection.length }} )</span
+					></a
+				>
+				<ng-template ngbNavContent>
+					<div *ngIf="!gotNotes" class="form-row mt-5 animated fadeIn">
+						<div class="col-sm-12 text-center align-middle">
+							<h4 class="text-muted mt-3 mb-3 w-100 text-center">
+								<i class="fa fa-bell"></i>&nbsp;No se han creado Notas para el
+								Cliente
+							</h4>
+						</div>
+					</div>
+
+					<div *ngIf="gotNotes" class="w-100">
+						<a
+							data-toggle="collapse"
+							href="#secondaryFilters"
+							role="button"
+							aria-expanded="false"
+							aria-controls="secondaryFilters"
+						>
+							<h5 class="title subsection mt-3">
+								Filtros de Búsqueda &nbsp;
+								<i class="fa fa-caret-square-down"></i>
+							</h5>
+						</a>
+						<div class="mt-1 collapse p-1" id="secondaryFilters">
+							<form
+								class="row mb-2"
+								[formGroup]="notesFilterForm"
+								autocomplete="off"
+								(ngSubmit)="filterNotesHistory()"
+							>
+								<div class="col-sm-12">
+									<div class="form-row">
+										<div class="form-group col-sm-12">
+											<label class="mb-0"><small>Titulo</small></label>
+											<input
+												type="text"
+												class="form-control w-100"
+												formControlName="noteTitle"
+												placeholder="Título de la Nota"
+											/>
+										</div>
+										<div class="form-group col-sm-12">
+											<label class="mb-0"><small>Detalle</small></label>
+											<textarea
+												class="form-control fixed-maintenance-textarea"
+												style="height: 8rem !important"
+												id="noteDescription"
+												rows="6"
+												cols="30"
+												placeholder="Descrición de la Nota"
+												formControlName="noteDescription"
+												autocomplete="noteDescription"
+											></textarea>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-sm-12 text-right">
+											<button
+												class="btn btn-dark m-auto"
+												(click)="filterNotesHistory()"
+											>
+												<i class="fa fa-search"></i>&nbsp;Buscar
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<hr class="w-100 mt-0 hr-secondary" />
+					</div>
+					<div class="animated fadeIn card-view mb-3 justify-content-between">
+						<div
+							*ngFor="
+								let item of clientNotesCollection
+									| paginate: paginationOptForNotes
+							"
+							class="card"
+						>
+							<div class="card-header">
+								<h5 class="card-title text-capitalize">
+									<i
+										class="text-muted fa"
+										[ngClass]="{
+											'fa-sticky-note': item.trackingType._id === '0002',
+											'fa-volume-up': item.trackingType._id === '0003'
+										}"
+									></i
+									>&nbsp;{{ item.title }}
+								</h5>
+							</div>
+							<div class="card-body">
+								<div class="col-sm-12">
+									<div
+										*ngIf="item.trackingType._id === '0002'"
+										class="row w-100"
+									>
+										<small>
+											<p class="title mt-1 mb-0 text-dark-green">Comentarios</p>
+											<p class="w-100 card-comments">
+												{{ item.comments }}
+											</p>
+										</small>
+									</div>
+									<div
+										*ngIf="item.trackingType._id === '0003'"
+										class="row w-100"
+									>
+										<small>
+											<p class="title mt-1 mb-0 text-dark-green">
+												Nota de Voz
+											</p></small
+										>
+										<audio controls="" class="w-100">
+											<source [src]="item.voiceMediaUrl" type="audio/wav" />
+										</audio>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="row w-100">
+										<small>
+											<p class="title mt-1 mb-0 text-dark-green">
+												Fecha de Creación
+											</p>
+											<p>
+												{{ item.createdDate | date: "fullDate" }}
+											</p>
+										</small>
+									</div>
+								</div>
+								<div class="w-100 text-right">
+									<span
+										*ngIf="item.images?.length > 0"
+										class="badge badge-info"
+									>
+										<i class="fa fa-image"></i>
+										&nbsp;{{ item.images.length }}
+										{{ item.images.length > 1 ? "Imágenes" : "Imagen" }}
+									</span>
+									&nbsp;
+									<span
+										class="badge"
+										[ngClass]="{
+											'cursor-pointer': clientTrackingDetail?.client?.ownClient,
+											'badge-muted': item.isArchived,
+											'badge-success': !item.isArchived
+										}"
+										(click)="archiveAction(item)"
+									>
+										<i
+											class="fa"
+											[ngClass]="{
+												'fa-archive': item.isArchived,
+												'fa-folder-open': !item.isArchived
+											}"
+										></i>&nbsp;
+										{{item.isArchived? "Archivado": "Activo"}}
+									</span>
+								</div>
+								<hr class="hr-secondary w-100 ml-0" />
+								<button
+									type="button"
+									class="btn btn-outline-dark w-100 mt-3 mb-0 position-sticky"
+									(click)="openDetailModal(item._id)"
+								>
+									<i class="fa fa-eye"></i>&nbsp; Observar Detalle
+								</button>
+							</div>
+						</div>
+					</div>
+					<pagination-controls
+						*ngIf="
+							clientNotesCollection.length > paginationOptForNotes.itemsPerPage
+						"
+						class="text-right notranslate"
+						(pageChange)="notesPageChange($event)"
+						previousLabel="‹"
+						nextLabel="›"
+					></pagination-controls>
+				</ng-template>
+			</li>
+		</ul>
+		<div [ngbNavOutlet]="nav"></div>
+	</div>
+</div>

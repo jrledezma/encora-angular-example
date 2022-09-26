@@ -1,0 +1,98 @@
+<div
+	class="modal-header animated fadeIn"
+	style="
+		background-image: url('https://absque-public-stuff.s3.amazonaws.com/clifoll/background.jpeg') !important;
+		background-size: cover;
+		opacity: 0.5;
+		height: 190px !important;
+	"
+>
+	<div class="w-100 text-center">
+		<img
+			*ngIf="userInfo.status === userStatus.confirmed"
+			class="img-thumbnail about-profile-image"
+			[ngClass]="{
+				'profile-image-status-created':
+					userInfo.status !== userStatus.confirmed,
+				'profile-image-status-confirmed':
+					userInfo.status === userStatus.confirmed
+			}"
+			[src]="userInfo.image || 'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'"
+		/>
+		<img
+			*ngIf="userInfo.status !== userStatus.confirmed"
+			class="img-thumbnail about-profile-image"
+			[ngClass]="{
+				'profile-image-status-created':
+					userInfo.status !== userStatus.confirmed,
+				'profile-image-status-confirmed':
+					userInfo.status === userStatus.confirmed
+			}"
+			src="https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon_status_created.png"
+		/>
+		<h4
+			class="text-dark-green text-center"
+			[ngClass]="{
+				'text-dark-green': userInfo.status === userStatus.confirmed,
+				'text-muted': userInfo.status !== userStatus.confirmed
+			}"
+			style="position: relative; top: -25px !important"
+		>
+			{{ userInfo.fullName }}
+		</h4>
+		<!--<img class="img-thumbnail about-profile-image" [src]="userInfo.image" />-->
+	</div>
+</div>
+<div class="modal-body animated fadeIn slow">
+	<div class="w-100">
+		<dl class="col-sm-12 mb-0">
+			<dt><small>Correo Electrónico</small></dt>
+			<dd
+				class="mb-0"
+				[ngClass]="{
+					'text-dark': userInfo.status === userStatus.confirmed,
+					'text-muted': userInfo.status !== userStatus.confirmed
+				}"
+			>
+				<p style="overflow-wrap: break-word">{{ userInfo.email }}</p>
+			</dd>
+		</dl>
+		<dl
+			*ngIf="userInfo.countryCode"
+			class="d-flex flex-wrap flex-row col-sm-12 mb-0"
+		>
+			<hr class="hr-secondary w-100" />
+			<div class="col-sm-6 p-1">
+				<dt><small>País</small></dt>
+				<dd class="mb-0">{{ userInfo.countryCode }}</dd>
+			</div>
+			<div class="col-sm-6 p-1">
+				<dt><small>Número de Teléfono</small></dt>
+				<dd class="mb-0">{{ userInfo.phoneNumber }}</dd>
+			</div>
+		</dl>
+	</div>
+	<div *ngIf="userInfo.about">
+		<dl class="col-sm-12 mb-0">
+			<hr class="hr-secondary w-100" />
+			<dt><small>Acerca de</small></dt>
+			<dd class="mb-0 ql-viewer-container">
+				<quill-view-html
+					[content]="userInfo.about"
+					format="html"
+					theme="snow"
+					style="overflow: hidden; overflow-y: scroll"
+				></quill-view-html>
+			</dd>
+		</dl>
+	</div>
+</div>
+<button
+	type="button"
+	class="btn btn-danger close-modal animated fadeIn slower float-right"
+	(click)="activeModal.close()"
+>
+	<small class="align-middle">
+		<i class="fa fa-times" aria-hidden="true"></i>
+	</small>
+</button>

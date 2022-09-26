@@ -1,0 +1,751 @@
+<nav aria-label="breadcrumb animated fadeIn">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item active component-header" aria-current="page">
+			<h4 *ngIf="!dealData || !dealData._id" class="text-muted">
+				<i class="fa fa-briefcase"></i>&nbsp;Crear Trato con Cliente
+			</h4>
+			<h4 *ngIf="dealData && dealData._id" class="text-muted">
+				<i class="fa fa-briefcase"></i>&nbsp;Detalle de Trato con Cliente
+			</h4>
+		</li>
+	</ol>
+</nav>
+<div class="admin-platform-container mb-3 animated fadeIn slow">
+	<form [formGroup]="dealForm" autocomplete="off">
+		<div class="col-sm-12">
+			<div class="d-flex flex-wrap flex-row main-box col-sm-12">
+				<div class="col-sm-6">
+					<h6 class="text-muted"><i class="fa fa-list-alt"></i>&nbsp;Datos Generales</h6>
+					<div class="form-row mt-2">
+						<div class="form-group col-sm-6">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Código de Referencia</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls.referenceCode.errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<small
+									*ngIf="dealForm.controls.referenceCode.status === 'PENDING'"
+									class="form-control-feedback mt-1 text-gold"
+								>
+									<i class="fa fa-spinner fa-spin"></i>
+								</small>
+								<input
+									type="text"
+									class="form-control w-100"
+									id="referenceCode"
+									formControlName="referenceCode"
+									placeholder="Código de Referencia"
+								/>
+								<div
+									*ngIf="dealForm.controls.referenceCode.errors?.exists"
+									class="form-control-feedback mt-1"
+								>
+									<small class="text-danger">
+										<i class="fa fa-exclamation-circle"></i>&nbsp; Código registrado
+										anteriormente..
+									</small>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-sm-6">
+							<div class="form-group w-100 mb-0">
+								<label class="mb-0"><small>Seleccionar Cliente</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls['client'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="clientsCollection"
+									bindValue="_id"
+									bindLabel="companyName"
+									formControlName="client"
+									placeHolder="Seleccionar Cliente"
+									(change)="displaySelectedClientContacts($event)"
+								></ng-select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Título</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls['title'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<input
+									type="text"
+									class="form-control w-100"
+									id="title"
+									formControlName="title"
+									placeholder="Titulo del Registro"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-0">
+							<label class="mb-0"><small>Detalles</small></label
+							>&nbsp;
+							<small
+								*ngIf="dealForm.controls['comments'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<textarea
+								class="form-control fixed-maintenance-textarea"
+								style="height: 10rem !important"
+								id="description"
+								rows="6"
+								cols="30"
+								maxlength="2500"
+								placeholder="Ingresar Detalle del Contacto Realizado"
+								formControlName="comments"
+								autocomplete="ccommets"
+							></textarea>
+							<div
+								*ngIf="
+									dealForm.controls['comments'].value.length > 0 &&
+									dealForm.controls['comments'].value.length < 15
+								"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe
+									tener como mínimo 15 caracteres..
+								</small>
+							</div>
+							<div
+								*ngIf="dealForm.controls['comments'].errors?.maxlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener
+									como máximo 500 caracteres..
+								</small>
+							</div>
+							<div class="textArea-char-counter text-muted pull-right mr-0">
+								<small style="font-size: 12px !important">
+									*&nbsp;
+									{{
+										dealForm.controls.comments.value.length
+											? dealForm.controls.comments.value.length
+											: 0
+									}}
+									/ 500
+								</small>
+							</div>
+						</div>
+					</div>
+					<!--
+					<div class="form-row" *ngIf="dealData && dealData._id">
+						<div class="col-sm-10"></div>
+						<div class="form-group col-sm-2">
+							<div class="form-group float-right w-100 mb-0">
+								<label class="mb-0"><small>Estado</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls['client'].errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="button r switch-activator mt-1">
+									<input type="checkbox" class="checkbox" formControlName="isArchived" />
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					-->
+				</div>
+				<!--team members-->
+				<div
+					class="col-sm-6"
+					style="
+						border-left-color: #f8f8f8;
+						border-left-style: solid;
+						border-left-width: 1px;
+					"
+				>
+					<div *ngIf="canAddStakeholder" class="w-100 mt-2 pl-1 pr-1">
+						<h6 class="text-muted mb-1 mt-0">
+							<i class="fa fa-users"></i>&nbsp;Miembros del Equipo
+						</h6>
+						<div class="form-group w-100 mb-0">
+							<label class="mb-0">
+								<small> Búsqueda de Miembros de Equipo </small>
+							</label>
+							<div class="d-block w-100 text-right">
+								<form [formGroup]="userSearchForm" autocomplete="off">
+									<input
+										class="form-control"
+										type="text"
+										formControlName="filter"
+										placeHolder="Buscar por Correo Electrónico"
+										(keyup.enter)="
+											onEnter(availableUsers.length ? availableUsers[0] : null)
+										"
+									/>
+								</form>
+								<div class="floating-result-container" *ngIf="showUserSearchResult">
+									<button class="btn btn-danger" (click)="showUserSearchResult = false">
+										<small><i class="fa fa-times"></i></small>
+									</button>
+									<ul>
+										<li
+											[hidden]="showSearchingMessage"
+											*ngFor="let item of availableUsers"
+										>
+											<a class="cursor-pointer" (click)="addStakeHolder(item)">
+												<div class="d-flex flex-row flex-nowrap p-1">
+													<div class="w-20 text-left">
+														<img
+															*ngIf="
+																item.status === 'selected' ||
+																item.status === userStatus.confirmed
+															"
+															class="img-thumbnail profile-image-small"
+															[ngClass]="{
+																'profile-image-status-created':
+																	item.status === userStatus.created,
+																'profile-image-status-confirmed':
+																	item.status === userStatus.confirmed
+															}"
+															[src]="
+																item.image ||
+																'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+															"
+															style="width: 54px; height: 54px"
+														/>
+														<img
+															*ngIf="item.status === userStatus.created"
+															class="img-thumbnail profile-image-small"
+															[ngClass]="{
+																'profile-image-status-created':
+																	item.status === userStatus.created,
+																'profile-image-status-confirmed':
+																	item.status === userStatus.confirmed
+															}"
+															[src]="
+																'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon_status_created.png'
+															"
+															style="width: 54px; height: 54px"
+														/>
+													</div>
+													<div class="w-80 text-left">
+														<h6
+															class="mb-0 ml-2"
+															[ngClass]="{
+																'text-muted': item.status === userStatus.created,
+																'text-dark-green': item.status !== userStatus.created
+															}"
+														>
+															{{ item?.fullName }}
+														</h6>
+														<p
+															class="mt-0 ml-2 mb-0"
+															[ngClass]="{
+																'text-muted': item.status === userStatus.created,
+																'text-dark': item.status !== userStatus.created
+															}"
+														>
+															<small>{{ item?.email }}</small>
+														</p>
+													</div>
+												</div></a
+											>
+										</li>
+										<li *ngIf="showInviteUserMessage">
+											<a class="cursor-pointer" (click)="addStakeHolder()">
+												<div class="d-flex flex-row flex-nowrap p-1">
+													<div class="w-100 p-1 text-left">
+														<h5 class="mb-0 ml-1 text-dark-green">
+															{{ userSearchForm.controls.filter.value }}
+														</h5>
+													</div>
+												</div>
+												<div class="text-left col-sm-12">
+													<p class="mt-0 mb-0">
+														<small
+															>El correo electrónico no se encuentra registrado,
+															enviaremos una invitación al correo electrónico
+															ingresado</small
+														>
+													</p>
+												</div>
+											</a>
+										</li>
+										<li *ngIf="showSearchingMessage">
+											<div class="d-flex flex-row flex-nowrap p-1">
+												<div class="w-100 p-1 text-left">
+													<h6 class="mb-0 ml-1 text-dark">
+														<i class="fa fa-exclamation-circle text-orange"></i>&nbsp; No
+														se ha encontrado un correo electrónico relacionado
+													</h6>
+													<p class="mt-0 mb-0">
+														<small
+															>Ingrese un correo electrónico valido para enviar una
+															invitación</small
+														>
+													</p>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="w-100">
+						<div *ngIf="stakeholders.length > 0" class="form-row">
+							<div class="col-sm-12" style="overflow-y: scroll">
+								<ul class="team-members mt-2 list">
+									<li *ngFor="let stakeholder of stakeholders; let i = index">
+										<div class="d-flex flex-row flex-nowrap p-1">
+											<div class="w-20 text-center">
+												<img
+													*ngIf="stakeholder.status === userStatus.confirmed"
+													class="img-thumbnail profile-image-small"
+													[ngClass]="{
+														'profile-image-status-created':
+															stakeholder.status === userStatus.created,
+														'profile-image-status-confirmed':
+															stakeholder.status === userStatus.confirmed
+													}"
+													[src]="
+														stakeholder.image ||
+														'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon.png'
+													"
+												/>
+												<img
+													*ngIf="stakeholder.status === userStatus.created"
+													class="img-thumbnail profile-image-small"
+													[ngClass]="{
+														'profile-image-status-created':
+															stakeholder.status === userStatus.created,
+														'profile-image-status-confirmed':
+															stakeholder.status === userStatus.confirmed
+													}"
+													[src]="
+														'https://absque-public-stuff.s3.amazonaws.com/clifoll/user_icon_status_created.png'
+													"
+												/>
+											</div>
+											<div class="w-80 text-left">
+												<a
+													class="cursor-pointer"
+													(click)="openUserInfoDetailModal(stakeholder)"
+												>
+													<h6
+														class="mb-0 ml-2"
+														[ngClass]="{
+															'text-muted': stakeholder.status === userStatus.created,
+															'text-dark-green': stakeholder.status !== userStatus.created
+														}"
+													>
+														<i
+															class="fa"
+															[ngClass]="{
+																'fa-user-check':
+																	stakeholder.invitationStatus === 'accepted',
+																'fa-user-clock':
+																	stakeholder.invitationStatus !== 'accepted',
+																'text-muted': stakeholder.invitationStatus !== 'accepted',
+																'text-dark-green':
+																	stakeholder.invitationStatus === 'accepted'
+															}"
+														></i
+														>&nbsp;
+														{{ stakeholder?.fullName }}
+													</h6>
+													<p
+														class="mt-0 ml-2 mb-0"
+														[ngClass]="{
+															'text-muted': stakeholder.status === userStatus.created,
+															'text-dark': stakeholder.status !== userStatus.created
+														}"
+													>
+														<small
+															><i class="fa fa-envelope"></i>&nbsp;{{
+																stakeholder?.email
+															}}</small
+														>
+													</p>
+												</a>
+											</div>
+											<div class="w-10 text-center align-middle">
+												<a
+													*ngIf="canRemoveStakeholders"
+													role="button"
+													class="text-danger cursor-pointer position-relative"
+													style="top: 0.6rem; right: 0.15rem; font-size: 20px"
+													(click)="removeStakeHolder(stakeholder.email)"
+												>
+													<i class="fa fa-trash"></i>
+												</a>
+											</div>
+										</div>
+										<hr
+											*ngIf="stakeholders.length > 1 && i < stakeholders.length - 1"
+											class="mb-0 mb-1 hr-secondary w-100"
+										/>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div *ngIf="!stakeholders.length" class="form-row">
+							<div class="col-sm-12 text-center align-middle">
+								<h4 class="text-muted mt-3 mb-3 text-center">
+									No hay Interesados asociados
+								</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--next action-->
+		<hr *ngIf="!dealData || !dealData._id" class="hr-secondary w-90 m-auto" />
+		<div
+			*ngIf="!dealData || !dealData._id"
+			class="col-sm-12 mt-2"
+			[ngClass]="{
+				animated: dealData && dealData._id,
+				fadeOut: dealData && dealData._id
+			}"
+		>
+			<div class="col-sm-12">
+				<h6 class="text-muted">
+					<i class="fa fa-directions"></i>&nbsp;Próxima Acción a Realizar
+				</h6>
+			</div>
+			<div class="d-flex flex-row flex-wrap">
+				<div class="col-sm-6">
+					<div class="form-row">
+						<div class="form-group col-sm-6 mb-0">
+							<div class="form-group float-right w-100">
+								<label class="mb-0"><small>Fecha de Recordatorio</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls.scheduleDate.errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="input-group date" data-provide="datepicker">
+									<input
+										type="date"
+										class="form-control"
+										[min]="minSelectableDate"
+										formControlName="scheduleDate"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-sm-6 mb-0">
+							<div class="form-group float-right w-100">
+								<label class="mb-0"><small>Hora de Recordatorio</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls.scheduleHour.errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<div class="input-group date" data-provide="datepicker">
+									<input
+										type="time"
+										class="form-control"
+										formControlName="scheduleHour"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<div class="form-group w-100 mb-0">
+								<label class="mb-0"><small>Acción a Realizar</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls.actionToTake.errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="actionsToTakeCollection"
+									bindValue="_id"
+									bindLabel="value"
+									formControlName="actionToTake"
+									placeHolder="Seleccionar Cliente"
+								></ng-select>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<div class="form-group w-100 mb-0">
+								<label class="mb-0"><small>Contacto del Cliente</small></label
+								>&nbsp;
+								<small
+									*ngIf="dealForm.controls.clientContact.errors?.required"
+									class="form-control-feedback mt-1 text-danger"
+									>*</small
+								>
+								<ng-select
+									[items]="clientContacts"
+									bindValue="idNumber"
+									bindLabel="fullName"
+									formControlName="clientContact"
+									placeHolder="Seleccionar Contacto Cliente"
+								></ng-select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-0">
+							<label class="mb-0"><small>Descripción</small></label
+							>&nbsp;
+							<small
+								*ngIf="dealForm.controls['trackingComments'].errors?.required"
+								class="form-control-feedback mt-1 text-danger"
+								>*
+							</small>
+							<textarea
+								class="form-control fixed-maintenance-textarea"
+								style="height: 12rem !important"
+								id="description"
+								rows="6"
+								cols="30"
+								maxlength="500"
+								placeholder="Ingresar Detalle del Contacto Realizado"
+								formControlName="trackingComments"
+								autocomplete="ctrackingComments"
+							></textarea>
+							<div
+								*ngIf="
+									dealForm.controls['trackingComments'].value?.length > 0 &&
+									dealForm.controls['trackingComments'].value?.length < 15
+								"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe
+									tener como mínimo 15 caracteres..
+								</small>
+							</div>
+							<div
+								*ngIf="dealForm.controls['trackingComments'].errors?.maxlength"
+								class="form-control-feedback mt-1"
+							>
+								<small class="text-danger">
+									<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener
+									como máximo 500 caracteres..
+								</small>
+							</div>
+							<div class="textArea-char-counter text-muted pull-right mr-0">
+								<small style="font-size: 12px !important">
+									*&nbsp;
+									{{
+										dealForm.controls.trackingComments?.value?.length
+											? dealForm.controls.trackingComments?.value?.length
+											: 0
+									}}
+									/ 500
+								</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-ro col-sm-12w">
+				<div class="form-group col-sm-6">
+					<div class="form-group w-100 mb-0">
+						<label class="mb-0"><small>Miembro del Equipo a Cargo</small></label
+						>&nbsp;
+						<small
+							*ngIf="
+								dealForm.controls.teamMemberInCharge.errors?.required ||
+								dealForm.controls.asignActionToTakeToSessionUser.errors?.required
+							"
+							class="form-control-feedback mt-1 text-danger"
+							>*</small
+						>
+						<div class="form-check pl-0 mb-2">
+							<div class="d-flex flex-row flex-nowrap justify-content-start">
+								<label class="w-80 mb-0 align-middle">
+									<small
+										[ngClass]="{
+											'text-success':
+												dealForm.controls.asignActionToTakeToSessionUser.value,
+											'text-muted':
+												!dealForm.controls.asignActionToTakeToSessionUser.value
+										}"
+										>Asignarme esta Acción a Tomar</small
+									>
+								</label>
+								<div
+									class="button r switch-activator"
+									style="margin-top: -7px !important"
+								>
+									<input
+										type="checkbox"
+										class="checkbox"
+										formControlName="asignActionToTakeToSessionUser"
+										(change)="asignActionToTakeToSessionUserCheckedChanged($event)"
+									/>
+									<div class="knobs"></div>
+									<div class="layer"></div>
+								</div>
+							</div>
+						</div>
+						<ng-select
+							[items]="usersToAsingTask"
+							bindValue="_id"
+							bindLabel="fullName"
+							formControlName="teamMemberInCharge"
+							(change)="teamMemberInChargeChange($event)"
+							placeHolder="Seleccionar Cliente"
+						></ng-select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			*ngIf="dealData && dealData._id"
+			class="col-sm-12 mt-2"
+			[ngClass]="{
+				animated: dealData || dealData._id,
+				fadeIn: dealData || dealData._id,
+				slow: dealData || dealData._id
+			}"
+		>
+			<div *ngIf="dealTracking.length > 0" class="form-row">
+				<div class="col-sm-12" style="overflow-y: scroll">
+					<h5>Próximas Acciones a Tomar</h5>
+					<div
+						*ngFor="let tracking of dealTracking; let i = index"
+						class="card w-100 card-border-light"
+					>
+						<div class="card-header" style="background-color: #f8f9fa !important">
+							<h6 class="text-dark-blue">
+								<i
+									class="fa"
+									[ngClass]="{
+										'fa-comments':
+											tracking.actionToTake._id === '0001' ||
+											tracking.actionToTake._id === '0002',
+										'fa-envelope': tracking.actionToTake._id === '0003',
+										'fa-phone-alt': tracking.actionToTake._id === '0004',
+										'fa-tv': tracking.actionToTake._id === '0005',
+										'fa-users':
+											tracking.actionToTake._id === '0006' ||
+											tracking.actionToTake._id === '0007',
+										'fa-file': tracking.actionToTake._id === '0008',
+										'fa-send':
+											tracking.actionToTake._id === '0009' ||
+											tracking.actionToTake._id === '0011',
+										'fa-file-alt': tracking.actionToTake._id === '0010'
+									}"
+								></i
+								>&nbsp;{{ tracking.actionToTake.value }}
+							</h6>
+							<div class="d-flex flex-row flex-nowrap justify-content-between">
+								<p class="text-muted mb-1 mt-2">
+									<small style="font-size: 75%"
+										><i class="fa fa-calendar"></i>&nbsp;
+										{{ tracking.scheduleDate | date: 'longDate' }}&nbsp;-&nbsp;{{
+											tracking.scheduleHour
+										}}</small
+									>
+								</p>
+								<button
+									class="btn btn-outline-success"
+									(click)="openAttendNextActionModal(tracking._id)"
+								>
+									<small><i class="fa fa-check-circle"></i>&nbsp;Atender</small>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="col-sm-12 row">
+								<label class="mb-0 text-muted w-100"
+									><small style="font-size: 75%"
+										><i class="fa fa-address-card"></i>&nbsp;Contacto Relacionado</small
+									></label
+								>
+								<p class="text-dark mb-1">{{ tracking.clientContact?.fullName }}</p>
+							</div>
+							<div class="col-sm-12 row">
+								<label class="mb-0 text-muted w-100"
+									><small style="font-size: 75%"
+										><i class="fa fa-list"></i>&nbsp;Descripción</small
+									></label
+								>
+								<p
+									class="text-dark mb-1"
+									maxlength="200"
+									style="
+										width: 100%;
+										overflow: hidden;
+										white-space: nowrap;
+										text-overflow: ellipsis;
+									"
+								>
+									{{ tracking.comments }}
+								</p>
+							</div>
+							<div class="col-sm-12 row">
+								<div class="d-block w-100">
+									<label class="mb-0 text-muted w-100 text-right"
+										><small style="font-size: 75%"
+											><i class="fa fa-user"></i>&nbsp;Miembro Asignado</small
+										></label
+									>
+									<p class="text-right text-dark mb-1">
+										{{ tracking.teamMemberInCharge.firstName }}
+										{{ tracking.teamMemberInCharge.lastName }}
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="!dealTracking.length" class="form-row">
+				<div class="col-sm-12 text-center align-middle">
+					<h4 class="text-muted mt-3 mb-3 text-center">No hay Acciones registradas</h4>
+				</div>
+			</div>
+		</div>
+	</form>
+	<hr *ngIf="!dealData || !dealData._id" class="hr-secondary" />
+	<div *ngIf="!dealData || !dealData._id" class="col-sm-12 text-right">
+		<div class="btn-group">
+			<button class="btn btn-outline-dark">
+				<i class="fa fa-calendar"></i>
+			</button>
+			<button
+				*ngIf="showSaveButton"
+				type="submit"
+				class="btn btn-success"
+				(click)="save()"
+				[disabled]="dealForm.invalid"
+			>
+				<i class="fa fa-save"></i>&nbsp; Guardar
+			</button>
+		</div>
+	</div>
+</div>

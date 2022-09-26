@@ -1,0 +1,269 @@
+<div class="modal-header">
+	<div *ngIf="currentAttentionStep === 1" class="d-block">
+		<h4 class="modal-title text-dark-blue">
+			<i
+				class="fa"
+				[ngClass]="{
+					'fa-comments':
+						actionToAttend?.actionToTake?._id === '0001' ||
+						actionToAttend?.actionToTake?._id === '0002',
+					'fa-envelope': actionToAttend?.actionToTake?._id === '0003',
+					'fa-phone-alt': actionToAttend?.actionToTake?._id === '0004',
+					'fa-tv': actionToAttend?.actionToTake?._id === '0005',
+					'fa-users':
+						actionToAttend?.actionToTake?._id === '0006' ||
+						actionToAttend?.actionToTake?._id === '0007',
+					'fa-file': actionToAttend?.actionToTake?._id === '0008',
+					'fa-send':
+						actionToAttend?.actionToTake?._id === '0009' ||
+						actionToAttend?.actionToTake?._id === '0011',
+					'fa-file-alt': actionToAttend?.actionToTake?._id === '0010'
+				}"
+			></i
+			>&nbsp;{{ actionToAttend?.actionToTake?.value }}
+		</h4>
+		<p class="text-muted mb-1 mt-2">
+			<small style="font-size: 75%"
+				><i class="fa fa-calendar"></i>&nbsp;
+				{{ actionToAttend?.scheduleDate | date: 'longDate' }}&nbsp;-&nbsp;{{
+					actionToAttend?.scheduleHour
+				}}</small
+			>
+		</p>
+	</div>
+	<h4 *ngIf="currentAttentionStep === 2" class="modal-title text-muted">
+		<i class="fa fa-directions"></i>&nbsp;Establecer Próxima Acción
+	</h4>
+	<button
+		type="button"
+		class="btn btn-danger close-modal animated fadeIn slower float-right"
+		(click)="activeModal.close()"
+	>
+		<small class="align-middle">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</small>
+	</button>
+</div>
+<div class="modal-body animated fadeIn">
+	<div *ngIf="currentAttentionStep === 1">
+		<div class="col-sm-12 pl-0 pr-0">
+			<div class="d-flex flex-row flex-wrap justify-content-between w-100 mb-1">
+				<div class="d-block w-50">
+					<label class="mb-0 text-muted w-100"
+						><small style="font-size: 75%"
+							><i class="fa fa-address-card"></i>&nbsp;Contacto Relacionado</small
+						></label
+					>
+					<a
+						class="text-info mb-1"
+						data-toggle="collapse"
+						href="#relatedClientContact"
+						role="button"
+						aria-expanded="false"
+						aria-controls="relatedClientContact"
+					>
+						{{ actionToAttend?.clientContact?.fullName }}&nbsp;<i
+							class="fa fa-caret-square-down"
+						></i>
+					</a>
+					<div class="mt-1 collapse" id="relatedClientContact">
+						<p class="text-muted mb-0" style="white-space: pre; overflow: hidden">
+							<small>
+								<i class="fa fa-envelope"></i>&nbsp;{{
+									actionToAttend?.clientContact?.email ||
+										'Correo Electrónico no registrado'
+								}}</small
+							>
+						</p>
+						<p class="text-muted mt-0">
+							<small>
+								<i class="fa fa-phone-alt"></i>&nbsp;{{
+									actionToAttend?.clientContact?.cellPhone ||
+										'Número Telefónico no registrado'
+								}}</small
+							>
+						</p>
+					</div>
+				</div>
+				<div class="d-block w-50">
+					<label class="mb-0 text-muted w-100"
+						><small style="font-size: 75%"
+							><i class="fa fa-user-cog"></i>&nbsp;Miembro Asignado</small
+						></label
+					>
+					<a
+						class="text-info mb-1"
+						data-toggle="collapse"
+						href="#teamMemberInCharge"
+						role="button"
+						aria-expanded="false"
+						aria-controls="teamMemberInCharge"
+					>
+						{{ actionToAttend?.teamMemberInCharge?.firstName }}
+						{{ actionToAttend?.teamMemberInCharge?.lastName }}&nbsp;<i
+							class="fa fa-caret-square-down"
+						></i>
+					</a>
+					<div class="mt-1 collapse" id="teamMemberInCharge">
+						<p class="text-muted" style="white-space: pre; overflow: hidden">
+							<small>
+								<i class="fa fa-envelope"></i>&nbsp;{{
+									actionToAttend?.teamMemberInCharge?.email ||
+										'Correo Electrónico no registrado'
+								}}</small
+							>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 row">
+			<label class="mb-0 text-muted w-100"
+				><small style="font-size: 75%"
+					><i class="fa fa-list"></i>&nbsp;Descripción</small
+				></label
+			>
+			<p class="text-dark mb-1 text-justify">{{ actionToAttend?.comments }}</p>
+		</div>
+		<form [formGroup]="actionToTakeAttentionForm" autocomplete="off">
+			<div class="form-row">
+				<div class="form-group col-sm-12 mt-3">
+					<label class="mb-0"><small>Detalle de la Atención</small></label
+					>&nbsp;
+					<small
+						*ngIf="actionToTakeAttentionForm.controls['attentionDetail'].errors?.required"
+						class="form-control-feedback mt-1 text-danger"
+						>*
+					</small>
+					<textarea
+						class="form-control fixed-maintenance-textarea"
+						style="height: 10rem !important"
+						id="description"
+						rows="6"
+						cols="30"
+						placeholder="Detalle de Atención"
+						formControlName="attentionDetail"
+						autocomplete="attentionDetail"
+					></textarea>
+					<div
+						*ngIf="
+							actionToTakeAttentionForm.controls['attentionDetail'].errors?.minlength
+						"
+						class="form-control-feedback mt-1"
+					>
+						<small class="text-danger">
+							<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios debe tener
+							como mínimo 20 caracteres..
+						</small>
+					</div>
+					<div
+						*ngIf="
+							actionToTakeAttentionForm.controls['attentionDetail'].errors?.maxlength
+						"
+						class="form-control-feedback mt-1"
+					>
+						<small class="text-danger">
+							<i class="fa fa-exclamation-circle"></i>&nbsp; Los Comentarios tener como
+							máximo 250 caracteres..
+						</small>
+					</div>
+					<div class="textArea-char-counter text-muted pull-right">
+						<small class="">
+							*&nbsp;
+							{{
+								actionToTakeAttentionForm.controls.attentionDetail.value.length
+									? actionToTakeAttentionForm.controls.attentionDetail.value.length
+									: 0
+							}}
+							/ 250
+						</small>
+					</div>
+				</div>
+			</div>
+		</form>
+		<hr class="hr-secondary w-100 mt-0 mt-2" />
+		<div class="col-sm-12 row">
+			<div class="d-flex flex-row flex-nowrap w-100">
+				<div class="d-block w-50">
+					<label class="mb-0 text-muted w-100"
+						><small style="font-size: 75%"
+							><i class="fa fa-award"></i>&nbsp;Creación</small
+						></label
+					>
+					<div class="pl-1">
+						<p class="text-dark mb-0">
+							<small style="font-size: 75%"><i class="fa fa-user"></i></small>
+							{{ actionToAttend?.createdBy?.firstName }}
+							{{ actionToAttend?.createdBy?.lastName }}
+						</p>
+						<p class="text-muted">
+							<small style="font-size: 75% !important">
+								<i class="fa fa-calendar"></i>
+								{{ actionToAttend?.createdDate | date: 'longDate' }}</small
+							>
+						</p>
+					</div>
+				</div>
+				<div class="d-block w-50">
+					<label
+						*ngIf="actionToAttend?.lastModificationUser"
+						class="mb-0 text-muted w-100 text-right"
+						><small style="font-size: 75%"
+							><i class="fa fa-pen"></i>&nbsp;Última Modificación</small
+						></label
+					>
+					<div class="pl-1">
+						<p class="text-right text-dark mb-1">
+							{{ actionToAttend?.lastModificationUser?.firstName }}
+							{{ actionToAttend?.lastModificationUser?.lastName }}
+						</p>
+						<p *ngIf="actionToAttend?.lastModificationUser" class="text-muted">
+							<small style="font-size: 75% !important">
+								<i class="fa fa-calendar"></i>
+								{{ actionToAttend?.lastModificationDate | date: 'longDate' }}</small
+							>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div [hidden]="currentAttentionStep === 1">
+		<app-create-next-action
+			[trackingId]="dataId"
+			[teamMembers]="teamMembers"
+			[attentionDetail]="actionToTakeAttentionForm.controls.attentionDetail.value"
+			(closeModal)="closeModal($event)"
+		></app-create-next-action>
+	</div>
+</div>
+<div class="modal-footer">
+	<button
+		*ngIf="currentAttentionStep === 1"
+		type="button"
+		class="btn btn-outline-success"
+		[disabled]="actionToTakeAttentionForm.invalid"
+		(click)="currentAttentionStep = 2"
+	>
+		Crear Próxima Acción&nbsp;<i class="fa fa-arrow-right"></i>
+	</button>
+	<button
+		*ngIf="currentAttentionStep === 2"
+		type="button"
+		class="btn btn-outline-dark"
+		[disabled]="actionToTakeAttentionForm.invalid"
+		(click)="currentAttentionStep = 1"
+	>
+		<i class="fa fa-arrow-left"></i>&nbsp;Volver
+	</button>
+	<button
+		*ngIf="currentAttentionStep === 2"
+		type="button"
+		class="btn btn-success"
+		[disabled]="nextActionCpt ? nextActionCpt?.isFormInvalid() : true"
+		(click)="createRecord()"
+	>
+		<i class="fa fa-save"></i>&nbsp;Crear Próxima Acción
+	</button>
+</div>
